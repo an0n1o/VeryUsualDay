@@ -18,7 +18,7 @@ namespace VeryUsualDay
         public string AuthToken { get; set; } = "";
 
         [Description("BaseUrl для API")]
-        public string BaseApiUrl { get; set; } = "http://proxy.justmarfix.ru:9000";
+        public string BaseApiUrl { get; set; } = "http://mail.justmarfix.ru:9000";
 
         [Description("Список вещей для СБ (Dictionary<string, List<ItemType>>)")]
         public Dictionary<string, List<ItemType>> SecurityItems { get; set; } = new Dictionary<string, List<ItemType>>
@@ -27,17 +27,19 @@ namespace VeryUsualDay
                 "Стажёр",
                 new List<ItemType>
                 {
-                    ItemType.GunCOM15,
+                    ItemType.GunCOM18,
                     ItemType.KeycardJanitor,
-                    ItemType.Flashlight,
-                    ItemType.Radio
+                    ItemType.ArmorLight,
+                    ItemType.Radio,
+                    ItemType.Medkit,
+                    ItemType.GrenadeFlash,
+                    ItemType.Adrenaline
                 }
             },
             {
                 "Рядовой",
                 new List<ItemType>
                 {
-                    ItemType.KeycardGuard,
                     ItemType.ArmorLight,
                     ItemType.Radio,
                     ItemType.GrenadeFlash,
@@ -49,51 +51,51 @@ namespace VeryUsualDay
                 "Младший сержант",
                 new List<ItemType>
                 {
-                    ItemType.GunFSP9,
-                    ItemType.ArmorLight,
-                    ItemType.Medkit,
+                    ItemType.ArmorCombat,
                     ItemType.Radio,
+                    ItemType.GunCrossvec,
+                    ItemType.GunRevolver,
                     ItemType.GrenadeFlash,
-                    ItemType.KeycardGuard,
-                    ItemType.GunCOM18
+                    ItemType.Medkit,
+                    ItemType.Adrenaline
                 }
             },
             {
                 "Сержант",
                 new List<ItemType>
                 {
-                    ItemType.KeycardMTFPrivate,
                     ItemType.ArmorCombat,
-                    ItemType.Radio,
-                    ItemType.GrenadeFlash,
-                    ItemType.Medkit,
                     ItemType.GunCrossvec,
-                    ItemType.GunCOM18
+                    ItemType.GunA7,
+                    ItemType.Radio,
+                    ItemType.Medkit,
+                    ItemType.GrenadeFlash,
+                    ItemType.Adrenaline
                 }
             },
             {
                 "Старший сержант",
                 new List<ItemType>
                 {
-                    ItemType.GunCrossvec,
                     ItemType.ArmorCombat,
-                    ItemType.KeycardMTFPrivate,
-                    ItemType.GunRevolver,
+                    ItemType.GunCrossvec,
+                    ItemType.GunAK,
                     ItemType.Radio,
                     ItemType.Medkit,
-                    ItemType.Adrenaline
+                    ItemType.Adrenaline,
+                    ItemType.GrenadeFlash
                 }
             },
             {
                 "Лейтенант",
                 new List<ItemType>
                 {
-                    ItemType.KeycardMTFOperative,
-                    ItemType.ArmorCombat,
-                    ItemType.Radio,
-                    ItemType.GrenadeFlash,
-                    ItemType.Medkit,
+                    ItemType.ArmorHeavy,
                     ItemType.GunE11SR,
+                    ItemType.GunCrossvec,
+                    ItemType.GrenadeFlash,
+                    ItemType.Radio,
+                    ItemType.Medkit,
                     ItemType.Adrenaline
                 }
             },
@@ -103,12 +105,11 @@ namespace VeryUsualDay
                 {
                     ItemType.GunE11SR,
                     ItemType.ArmorHeavy,
-                    ItemType.KeycardMTFOperative,
+                    ItemType.GunAK,
+                    ItemType.GrenadeFlash,
                     ItemType.Radio,
-                    ItemType.GunCrossvec,
                     ItemType.Medkit,
-                    ItemType.Adrenaline,
-                    ItemType.Painkillers
+                    ItemType.Adrenaline
                 }
             },
             {
@@ -122,7 +123,6 @@ namespace VeryUsualDay
                     ItemType.Medkit,
                     ItemType.Adrenaline,
                     ItemType.Radio,
-                    ItemType.KeycardMTFCaptain
                 }
             }
         };
@@ -194,35 +194,35 @@ namespace VeryUsualDay
         {
             {
                 "Стажёр",
-                100f
-            },
-            {
-                "Рядовой",
-                100f
-            },
-            {
-                "Младший сержант",
-                150f
-            },
-            {
-                "Сержант",
                 175f
             },
             {
-                "Старший сержант",
+                "Рядовой",
                 200f
             },
             {
-                "Лейтенант",
+                "Младший сержант",
                 225f
             },
             {
-                "Старший лейтенант",
+                "Сержант",
                 250f
             },
             {
+                "Старший сержант",
+                275f
+            },
+            {
+                "Лейтенант",
+                300f
+            },
+            {
+                "Старший лейтенант",
+                325f
+            },
+            {
                 "Глава",
-                400f
+                450f
             }
         };
 
@@ -242,7 +242,6 @@ namespace VeryUsualDay
                 "Исследователь",
                 new List<ItemType>
                 {
-                    ItemType.KeycardScientist,
                     ItemType.KeycardZoneManager,
                     ItemType.Flashlight,
                     ItemType.Adrenaline,
@@ -253,7 +252,6 @@ namespace VeryUsualDay
                 "Медик",
                 new List<ItemType>
                 {
-                    ItemType.KeycardScientist,
                     ItemType.KeycardZoneManager,
                     ItemType.Painkillers,
                     ItemType.Adrenaline,
@@ -264,7 +262,6 @@ namespace VeryUsualDay
                 "Инженер",
                 new List<ItemType>
                 {
-                    ItemType.KeycardContainmentEngineer,
                     ItemType.Radio,
                     ItemType.Painkillers,
                     ItemType.Adrenaline,
@@ -276,8 +273,6 @@ namespace VeryUsualDay
                 "Психолог",
                 new List<ItemType>
                 {
-                    ItemType.KeycardScientist,
-                    ItemType.KeycardZoneManager,
                     ItemType.Adrenaline,
                     ItemType.Adrenaline,
                     ItemType.Painkillers,
@@ -288,7 +283,6 @@ namespace VeryUsualDay
                 "Научный руководитель",
                 new List<ItemType>
                 {
-                    ItemType.KeycardResearchCoordinator,
                     ItemType.Radio,
                     ItemType.Painkillers,
                     ItemType.Adrenaline,
@@ -299,7 +293,6 @@ namespace VeryUsualDay
                 "Глава",
                 new List<ItemType>
                 {
-                    ItemType.KeycardFacilityManager,
                     ItemType.Radio,
                     ItemType.SCP500,
                     ItemType.GunCOM18,
@@ -323,7 +316,6 @@ namespace VeryUsualDay
                 "Рабочий",
                 new List<ItemType>
                 {
-                    ItemType.KeycardJanitor,
                     ItemType.Flashlight,
                     ItemType.Painkillers,
                     ItemType.Medkit,
@@ -334,8 +326,6 @@ namespace VeryUsualDay
                 "Старший рабочий",
                 new List<ItemType>
                 {
-                    ItemType.KeycardJanitor,
-                    ItemType.KeycardZoneManager,
                     ItemType.Flashlight,
                     ItemType.Painkillers,
                     ItemType.Medkit,
@@ -418,7 +408,6 @@ namespace VeryUsualDay
                     ItemType.ArmorCombat,
                     ItemType.GunE11SR,
                     ItemType.Medkit,
-                    ItemType.KeycardMTFOperative,
                     ItemType.Radio,
                     ItemType.Adrenaline,
                     ItemType.Painkillers
@@ -430,7 +419,6 @@ namespace VeryUsualDay
                 {
                     ItemType.ArmorHeavy,
                     ItemType.GunLogicer,
-                    ItemType.KeycardMTFOperative,
                     ItemType.Medkit,
                     ItemType.Medkit,
                     ItemType.Radio,
@@ -444,7 +432,6 @@ namespace VeryUsualDay
                     ItemType.ArmorHeavy,
                     ItemType.GunCrossvec,
                     ItemType.GunE11SR,
-                    ItemType.KeycardMTFOperative,
                     ItemType.Medkit,
                     ItemType.Radio,
                     ItemType.Adrenaline
@@ -456,7 +443,6 @@ namespace VeryUsualDay
                 {
                     ItemType.ArmorHeavy,
                     ItemType.GunCom45,
-                    ItemType.KeycardMTFOperative,
                     ItemType.Adrenaline,
                     ItemType.SCP500,
                     ItemType.GunShotgun,
@@ -474,7 +460,6 @@ namespace VeryUsualDay
                     ItemType.Medkit,
                     ItemType.Adrenaline,
                     ItemType.Radio,
-                    ItemType.KeycardMTFCaptain,
                     ItemType.ArmorHeavy
                 }
             }
@@ -562,11 +547,11 @@ namespace VeryUsualDay
                     {
                         {
                             EffectType.BodyshotReduction,
-                            20
+                            40
                         },
                         {
                             EffectType.DamageReduction,
-                            20
+                            40
                         }
                     }
                 },
@@ -575,16 +560,12 @@ namespace VeryUsualDay
                     new Dictionary<EffectType, byte>
                     {
                         {
-                            EffectType.Disabled,
-                            1
-                        },
-                        {
                             EffectType.BodyshotReduction,
-                            10
+                            40
                         },
                         {
                             EffectType.DamageReduction,
-                            10
+                            40
                         }
                     }
                 },
@@ -602,11 +583,11 @@ namespace VeryUsualDay
                         },
                         {
                             EffectType.BodyshotReduction,
-                            7
+                            40
                         },
                         {
                             EffectType.DamageReduction,
-                            7
+                            40
                         },
                         {
                             EffectType.MovementBoost,
@@ -620,11 +601,15 @@ namespace VeryUsualDay
                     {
                         {
                             EffectType.BodyshotReduction,
-                            20
+                            40
                         },
                         {
                             EffectType.DamageReduction,
-                            20
+                            40
+                        },
+                        {
+                            EffectType.MovementBoost,
+                            15
                         }
                     }
                 }
@@ -641,7 +626,6 @@ namespace VeryUsualDay
                     ItemType.GunFSP9,
                     ItemType.GunCOM18,
                     ItemType.Radio,
-                    ItemType.KeycardMTFPrivate,
                     ItemType.Medkit,
                     ItemType.Adrenaline
                 }
@@ -652,7 +636,6 @@ namespace VeryUsualDay
                 {
                     ItemType.ArmorCombat,
                     ItemType.Radio,
-                    ItemType.KeycardMTFOperative,
                     ItemType.GunCrossvec,
                     ItemType.GunCOM18,
                     ItemType.Medkit,
@@ -669,7 +652,6 @@ namespace VeryUsualDay
                     ItemType.Radio,
                     ItemType.Medkit,
                     ItemType.Painkillers,
-                    ItemType.KeycardMTFOperative
                 }
             }
         };
@@ -798,7 +780,6 @@ namespace VeryUsualDay
         [Description("Инвентарь бойца БУО (List<ItemType>)")]
         public List<ItemType> BuoPrivateInventory { get; set; } = new List<ItemType>
         {
-            ItemType.KeycardMTFPrivate,
             ItemType.GunShotgun,
             ItemType.GunRevolver,
             ItemType.Medkit,
@@ -810,7 +791,6 @@ namespace VeryUsualDay
         [Description("Инвентарь сержанта БУО (List<ItemType>)")]
         public List<ItemType> BuoSergeantInventory { get; set; } = new List<ItemType>
         {
-            ItemType.KeycardMTFOperative,
             ItemType.GunE11SR,
             ItemType.GunRevolver,
             ItemType.Medkit,
@@ -822,7 +802,6 @@ namespace VeryUsualDay
         [Description("Инвентарь джаггернаута БУО (List<ItemType>)")]
         public List<ItemType> BuoJaggerInventory { get; set; } = new List<ItemType>
         {
-            ItemType.KeycardMTFOperative,
             ItemType.GunLogicer,
             ItemType.GunRevolver,
             ItemType.Medkit,
@@ -834,7 +813,6 @@ namespace VeryUsualDay
         [Description("Инвентарь ликвидатора БУО (List<ItemType>)")]
         public List<ItemType> BuoTerminatorInventory { get; set; } = new List<ItemType>
         {
-            ItemType.KeycardMTFCaptain,
             ItemType.Painkillers,
             ItemType.Painkillers,
             ItemType.Radio,

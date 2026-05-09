@@ -45,7 +45,7 @@ namespace VeryUsualDay.Commands
                         Pickup.CreateAndSpawn(ItemType.Painkillers, VeryUsualDay.Instance.SupplyBoxCoords,
                             new Quaternion());
                     }
-                    Cassie.Message(
+                    Exiled.API.Features.Cassie.Message(
                         "<b><color=#EE7600>[Заказ прибыл]</color>: медикаменты </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
                         isNoisy: false, isSubtitles: true);
                     break;
@@ -90,7 +90,7 @@ namespace VeryUsualDay.Commands
                     {
                         Pickup.CreateAndSpawn(ItemType.Medkit, VeryUsualDay.Instance.SupplyBoxCoords, new Quaternion());
                     }
-                    Cassie.Message(
+                    Exiled.API.Features.Cassie.Message(
                         "<b><color=#EE7600>[Заказ прибыл]</color>: питание </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
                         isNoisy: false, isSubtitles: true);
                     break;
@@ -113,7 +113,7 @@ namespace VeryUsualDay.Commands
                     {
                         Pickup.CreateAndSpawn(ItemType.Ammo9x19, _coords, new Quaternion());
                     }
-                    Cassie.Message(
+                    Exiled.API.Features.Cassie.Message(
                         "<b><color=#727472>[СБ]</color>: запасы были пополнены. <size=0> pitch_0.4 .G1",
                         isNoisy: false, isSubtitles: true);
                     break;

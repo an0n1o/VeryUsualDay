@@ -46,7 +46,7 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Ammo44Cal, 16);
                         player.AddAmmo(AmmoType.Ammo12Gauge, 28);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
-                        player.CustomInfo = "[Боец БУО]";
+                        player.CustomInfo = "(Боец БУО)";
                         player.Broadcast(15, "<color=#708090><b>Вы стали бойцом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
@@ -62,7 +62,7 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Ammo44Cal, 16);
                         player.AddAmmo(AmmoType.Nato556, 100);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
-                        player.CustomInfo = "[Сержант БУО]";
+                        player.CustomInfo = "(Сержант БУО)";
                         player.Broadcast(15, "<color=#708090><b>Вы стали сержантом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
@@ -78,7 +78,7 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Ammo44Cal, 16);
                         player.AddAmmo(AmmoType.Nato762, 200);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
-                        player.CustomInfo = "[Джаггернаут БУО]";
+                        player.CustomInfo = "(Джаггернаут БУО)";
                         player.Broadcast(15, "<color=#708090><b>Вы стали джаггернаутом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
@@ -93,7 +93,7 @@ namespace VeryUsualDay.Commands
                         player.ResetInventory(VeryUsualDay.Instance.Config.BuoTerminatorInventory);
                         player.AddAmmo(AmmoType.Nato556, 120);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
-                        player.CustomInfo = "[Ликвидатор БУО]";
+                        player.CustomInfo = "(Ликвидатор БУО)";
                         player.EnableEffect(EffectType.BodyshotReduction, 10);
                         player.EnableEffect(EffectType.DamageReduction, 10);
                         player.EnableEffect(EffectType.Vitality, 10);

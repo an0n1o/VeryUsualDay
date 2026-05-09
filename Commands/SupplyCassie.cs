@@ -18,7 +18,7 @@ namespace VeryUsualDay.Commands
                 response = "Режим FX не включён";
                 return false;
             }
-            Cassie.Message("<b><color=#EE7600>[Заказ прибыл]</color>: аномальные объекты </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+            Exiled.API.Features.Cassie.Message("<b><color=#EE7600>[Заказ прибыл]</color>: аномальные объекты </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
             response = "CASSIE успешно вызвано.";
             return true;
         }

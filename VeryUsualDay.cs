@@ -6,13 +6,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using CommandSystem.Commands.RemoteAdmin.Inventory;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using Exiled.API.Features.Items.Keycards;
 using Exiled.API.Features.Pickups;
 using Exiled.CustomItems.API.Features;
+using Interactables.Interobjects.DoorUtils;
 using MEC;
 using Newtonsoft.Json;
 using PlayerRoles;
@@ -215,13 +216,13 @@ namespace VeryUsualDay
                         case 0:
                             break;
                         case 1:
-                            Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок D. <size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок D. <size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
                             break;
                         case 2:
-                            Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: двое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: двое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
                             break;
                         case 3:
-                            Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: трое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: трое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
                             break;
                     }
                 }
@@ -369,6 +370,12 @@ namespace VeryUsualDay
                         }
                         player.MaxHealth = Instance.Config.SecurityHealth[json[4]];
                         player.Health = Instance.Config.SecurityHealth[json[4]];
+                        
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 30);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 30);
+                        
                         player.Teleport(_armedPersonnelTowerCoords);
                     });
                     break;
@@ -386,6 +393,17 @@ namespace VeryUsualDay
                             player.MaxHealth = Instance.Config.ScienceHealth[json[4]];
                             player.Health = Instance.Config.ScienceHealth[json[4]];
                         }
+                        else
+                        {
+                            player.MaxHealth = 175f;
+                            player.Health = 175f;
+                        }
+
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 15);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 15);
+                        
                         player.Teleport(_civilianPersonnelTowerCoords);
                     });
                     break;
@@ -472,7 +490,62 @@ namespace VeryUsualDay
                     });
                     break;
             }
+
+            ColorUtility.TryParseHtmlString(json[9], out var permColor);
+            ColorUtility.TryParseHtmlString(json[10], out var cardColor);
+            switch (json[5])
+            {
+                case "Site02":
+                    player.AddItem(Site02Keycard.Create(
+                        keycardLevels: new KeycardLevels(int.Parse(json[6]), int.Parse(json[7]), int.Parse(json[8])),
+                        permissionsColor: permColor,
+                        "Ключ_карта",
+                        cardColor,
+                        player.CustomInfo,
+                        json[11],
+                        Color.black,
+                        1
+                    ));
+                    break;
+                case "Management":
+                    player.AddItem(ManagementKeycard.Create(
+                        keycardLevels: new KeycardLevels(int.Parse(json[6]), int.Parse(json[7]), int.Parse(json[8])),
+                        permissionsColor: permColor,
+                        "Ключ_карта",
+                        cardColor,
+                        player.CustomInfo,
+                        Color.black
+                    ));
+                    break;
+                case "TaskForce":
+                    player.AddItem(TaskForceKeycard.Create(
+                        keycardLevels: new KeycardLevels(int.Parse(json[6]), int.Parse(json[7]), int.Parse(json[8])),
+                        permissionsColor: permColor,
+                        "Ключ_карта",
+                        cardColor,
+                        json[11],
+                        json[12],
+                        1
+                    ));
+                    break;
+                case "MetalCase":
+                    player.AddItem(MetalKeycard.Create(
+                        keycardLevels: new KeycardLevels(int.Parse(json[6]), int.Parse(json[7]), int.Parse(json[8])),
+                        permissionsColor: permColor,
+                        "Ключ_карта",
+                        cardColor,
+                        player.CustomInfo,
+                        json[11],
+                        Color.black,
+                        1,
+                        json[12]
+                    ));
+                    break;
+            }
+
+            player.EnableEffect(EffectType.SoundtrackMute);
         }
+        
         public void RoleDistribution()
         {
             foreach (var player in Exiled.API.Features.Player.Get(RoleTypeId.Tutorial))

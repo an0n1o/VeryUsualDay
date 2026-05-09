@@ -44,7 +44,7 @@ namespace VeryUsualDay.Commands
                 response = "Вы не находитесь в К.С. SCP-008.";
                 return false;
             }
-            Cassie.DelayedMessage("<b><color=#727472>[ВОУС]</color></b>: Объект-008 был перекрыт, распространение патогена прекращено. <size=0> pitch_0.1 .G2 . pitch_1.0 . . . . . . ", 1f, isSubtitles: true, isNoisy: false);
+            Exiled.API.Features.Cassie.DelayedMessage("<b><color=#727472>[ВОУС]</color></b>: Объект-008 был перекрыт, распространение патогена прекращено. <size=0> pitch_0.1 .G2 . pitch_1.0 . . . . . . ", 1f, isSubtitles: true, isNoisy: false);
             Timing.KillCoroutines("_008_poisoning");
             VeryUsualDay.Instance.Is008Leaked = false;
             response = "ВОУС SCP-008 прошло успешно.";
