@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
     if: ${{ !contains(github.event.head_commit.message, '#no-code') }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Nuget
         uses: iRebbok/setup-nuget@master
@@ -21,12 +21,12 @@ jobs:
         run: nuget restore VeryUsualDay.sln
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v3
 
       - name: Get references
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://misaka-zerotwo.github.io/SL-References/Master.zip -OutFile ${{ github.workspace }}/References.zip
+          Invoke-WebRequest -Uri https://exmod-team.github.io/SL-References/Dev.zip -OutFile ${{ github.workspace }}/References.zip
           Expand-Archive -Path References.zip -DestinationPath ${{ github.workspace }}\lib
 
       - name: Build
@@ -42,24 +42,24 @@ jobs:
           release-upload-url: ${{ github.event.release.upload_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  deploy:
-    name: Deploy plugin to the server
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Download plugin from release 
-        uses: robinraju/release-downloader@v1.10
-        with:
-          latest: true
-          fileName: 'VeryUsualDay.dll'
-      - name: Deploy plugin to the server
-        uses: rexlmanu/pterodactyl-upload-action@v2.1
-        with:
-          panel-host: ${{ secrets.PANEL_HOST }}
-          api-key: ${{ secrets.API_KEY }}
-          server-id: "13468e4c"
-          source: "VeryUsualDay.dll"
-          target: "./.config/EXILED/Plugins/"
-          decompress-target: true
+#  deploy:
+#    name: Deploy plugin to the server
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Download plugin from release 
+#        uses: robinraju/release-downloader@v1.10
+#        with:
+#          latest: true
+#          fileName: 'VeryUsualDay.dll'
+#      - name: Deploy plugin to the server
+#        uses: rexlmanu/pterodactyl-upload-action@v2.1
+#        with:
+#          panel-host: ${{ secrets.PANEL_HOST }}
+#          api-key: ${{ secrets.API_KEY }}
+#          server-id: "13468e4c"
+#          source: "VeryUsualDay.dll"
+#          target: "./.config/EXILED/Plugins/"
+#          decompress-target: true

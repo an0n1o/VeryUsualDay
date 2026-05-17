@@ -13,17 +13,17 @@ jobs:
     runs-on: windows-latest
     if: ${{ !contains(github.event.head_commit.message, '#no-code') }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Nuget
         uses: iRebbok/setup-nuget@master
       - name: Restore Packages
         run: nuget restore VeryUsualDay.sln
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v3
       - name: Get references
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://misaka-zerotwo.github.io/SL-References/Master.zip -OutFile ${{ github.workspace }}/References.zip
+          Invoke-WebRequest -Uri https://exmod-team.github.io/SL-References/Dev.zip -OutFile ${{ github.workspace }}/References.zip
           Expand-Archive -Path References.zip -DestinationPath ${{ github.workspace }}\lib
       - name: Build
         run: msbuild VeryUsualDay.sln -p:Configuration=release
@@ -34,25 +34,25 @@ jobs:
         with:
           name: plugin
           path: ${{ github.workspace }}\bin\Release\VeryUsualDay.dll
-  deploy-testing:
-    name: Deploy plugin to the testing server
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: plugin
-          path: plugin
-      - name: Deploy plugin to the server
-        uses: rexlmanu/pterodactyl-upload-action@v2.1
-        with:
-          panel-host: ${{ secrets.PANEL_HOST }}
-          api-key: ${{ secrets.API_KEY }}
-          server-id: "c6fcbf0a"
-          source: "plugin/VeryUsualDay.dll"
-          target: "./.config/EXILED/Plugins/"
-          decompress-target: false
-          restart: true
+#  deploy-testing:
+#    name: Deploy plugin to the testing server
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Download a single artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: plugin
+#          path: plugin
+#      - name: Deploy plugin to the server
+#        uses: rexlmanu/pterodactyl-upload-action@v2.1
+#        with:
+#          panel-host: ${{ secrets.PANEL_HOST }}
+#          api-key: ${{ secrets.API_KEY }}
+#          server-id: "c6fcbf0a"
+#          source: "plugin/VeryUsualDay.dll"
+#          target: "./.config/EXILED/Plugins/"
+#          decompress-target: false
+#          restart: true
