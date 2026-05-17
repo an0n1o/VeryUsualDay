@@ -12,7 +12,6 @@ using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Items.Keycards;
 using Exiled.API.Features.Pickups;
-using Exiled.CustomItems.API.Features;
 using Interactables.Interobjects.DoorUtils;
 using MEC;
 using Newtonsoft.Json;
@@ -275,19 +274,19 @@ namespace VeryUsualDay
                             var score = Random.Range(0, 100);
                             if (score < 25)
                             {
-                                player.PlayGunSound(ItemType.GunCrossvec, (byte)Random.Range(175, 256));
+                                player.PlayGunSound(FirearmType.Crossvec, (byte)Random.Range(175, 256));
                             }
                             else if (score < 50)
                             {
-                                player.PlayGunSound(ItemType.GunFSP9, (byte)Random.Range(175, 256));
+                                player.PlayGunSound(FirearmType.FSP9, (byte)Random.Range(175, 256));
                             }
                             else if (score < 75)
                             {
-                                player.PlayGunSound(ItemType.GunE11SR, (byte)Random.Range(175, 256));
+                                player.PlayGunSound(FirearmType.E11SR, (byte)Random.Range(175, 256));
                             }
                             else 
                             {
-                                player.PlayGunSound(ItemType.GunShotgun, (byte)Random.Range(175, 256));
+                                player.PlayGunSound(FirearmType.Shotgun, (byte)Random.Range(175, 256));
                             }
                         }
                         else if (Random.Range(0, 100) < 30)
