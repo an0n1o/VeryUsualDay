@@ -22,8 +22,8 @@ namespace VeryUsualDay.Utils
             Timing.CallDelayed(2f, () =>
             {
                 User.CustomInfo = "<b><color=#960018>SCP-049</color></b>";
-                User.MaxHealth = 13000f;
-                User.Health = 13000f;
+                User.MaxHealth = 3500f;
+                User.Health = 3500f;
                 User.Scale = new Vector3(1f, 1f, 1f);
                 User.IsGodModeEnabled = false;
                 VeryUsualDay.Instance.ScpPlayers.Add(User.Id, VeryUsualDay.Scps.Scp049);

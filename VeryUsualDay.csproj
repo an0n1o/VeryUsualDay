@@ -62,7 +62,7 @@
       <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.13.2" />
+    <PackageReference Include="ExMod.Exiled" Version="9.14.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +121,7 @@
     <Compile Include="Commands\VudScience.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Handlers\Player.cs" />
+    <Compile Include="Handlers\Scp049.cs" />
     <Compile Include="Handlers\Server.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="PrisonController.cs" />

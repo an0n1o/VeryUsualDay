@@ -120,8 +120,11 @@ namespace VeryUsualDay
             PlayerHandler.Handcuffing += Player.OnHandcuffing;
             PlayerHandler.InteractingDoor += Player.OnInteractingDoor;
             PlayerHandler.ChangingItem += Player.OnChangingItem;
+            
             ServerHandler.WaitingForPlayers += Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted += Server.OnRoundStarted;
+
+            // Exiled.Events.Handlers.Scp049.Attacking += Handlers.Scp049.OnAttacking;
         }
 
         private static void _unregisterEvents()
@@ -142,8 +145,11 @@ namespace VeryUsualDay
             PlayerHandler.Handcuffing -= Player.OnHandcuffing;
             PlayerHandler.InteractingDoor -= Player.OnInteractingDoor;
             PlayerHandler.ChangingItem -= Player.OnChangingItem;
+            
             ServerHandler.WaitingForPlayers -= Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted -= Server.OnRoundStarted;
+            
+            // Exiled.Events.Handlers.Scp049.Attacking -= Handlers.Scp049.OnAttacking;
         }
         
         public override void OnEnabled()
