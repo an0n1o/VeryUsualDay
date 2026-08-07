@@ -45,9 +45,10 @@ namespace VeryUsualDay.Commands
                         Pickup.CreateAndSpawn(ItemType.Painkillers, VeryUsualDay.Instance.SupplyBoxCoords,
                             new Quaternion());
                     }
-                    Exiled.API.Features.Cassie.Message(
-                        "<b><color=#EE7600>[Заказ прибыл]</color>: медикаменты </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
-                        isNoisy: false, isSubtitles: true);
+                    Exiled.API.Features.Cassie.MessageTranslated(
+                        message: "pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
+                        translation: "<b><color=#EE7600>[Заказ прибыл]</color>: медикаменты </color></b>",
+                        isNoisy: false, isSubtitles: true, isHeld: false);
                     break;
                 case "scp":
                     if (arguments.Count < 3)
@@ -90,9 +91,10 @@ namespace VeryUsualDay.Commands
                     {
                         Pickup.CreateAndSpawn(ItemType.Medkit, VeryUsualDay.Instance.SupplyBoxCoords, new Quaternion());
                     }
-                    Exiled.API.Features.Cassie.Message(
-                        "<b><color=#EE7600>[Заказ прибыл]</color>: питание </color></b> <size=0> pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
-                        isNoisy: false, isSubtitles: true);
+                    Exiled.API.Features.Cassie.MessageTranslated(
+                       message: "pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
+                       translation: "<b><color=#EE7600>[Заказ прибыл]</color>: питание </color></b>",
+                       isNoisy: false, isSubtitles: true, isHeld: false);
                     break;
                 case "security":
                     _coords = Room.Get(RoomType.LczArmory).Position;
@@ -113,9 +115,10 @@ namespace VeryUsualDay.Commands
                     {
                         Pickup.CreateAndSpawn(ItemType.Ammo9x19, _coords, new Quaternion());
                     }
-                    Exiled.API.Features.Cassie.Message(
-                        "<b><color=#727472>[СБ]</color>: запасы были пополнены. <size=0> pitch_0.4 .G1",
-                        isNoisy: false, isSubtitles: true);
+                    Exiled.API.Features.Cassie.MessageTranslated(
+                        message: "pitch_0.4 .G1",
+                        translation: "<b><color=#727472>[СБ]</color>: запасы были пополнены.",
+                        isNoisy: false, isSubtitles: true, isHeld: false);
                     break;
                 default:
                     response = "Формат команды - vudsupply <med/emf/scp/food/security> <type (for scp)> <amount (for scp/food)>";

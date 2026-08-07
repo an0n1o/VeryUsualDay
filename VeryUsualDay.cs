@@ -221,13 +221,13 @@ namespace VeryUsualDay
                         case 0:
                             break;
                         case 1:
-                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок D. <size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.MessageTranslated(message: ". . . . . . . . . . . . . . . . . . . . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок D.", isNoisy: false, isSubtitles: true, isHeld: false);
                             break;
                         case 2:
-                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: двое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.MessageTranslated(message: ". . . . . . . . . . . . . . . . . . . . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: двое испытуемых прибыло в блок D.", isNoisy: false, isSubtitles: true, isHeld: false);
                             break;
                         case 3:
-                            Exiled.API.Features.Cassie.Message("<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: трое испытуемых прибыло в блок D<size=0> . . . . . . . . . . . . . . . . . . . . . .", isNoisy: false, isSubtitles: true);
+                            Exiled.API.Features.Cassie.MessageTranslated(message: ". . . . . . . . . . . . . . . . . . . . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: трое испытуемых прибыло в блок D.", isNoisy: false, isSubtitles: true, isHeld: false);
                             break;
                     }
                 }

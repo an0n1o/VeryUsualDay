@@ -26,7 +26,15 @@ namespace VeryUsualDay.Commands
                 Timing.KillCoroutines("_008_poisoning");
                 Door.Get(DoorType.Scp106Primary).Unlock();
                 VeryUsualDay.Instance.Is008Leaked = false;
-                Exiled.API.Features.Cassie.DelayedMessage("<b><color=#727472>[ВОУС]</color></b>: Объект-008 был перекрыт, распространение патогена прекращено. <size=0> pitch_0.1 .G2 . pitch_1.0 . . . . . . ", 1f, isSubtitles: true, isNoisy: false);
+                Timing.CallDelayed(1f, () =>
+                {
+                    Exiled.API.Features.Cassie.MessageTranslated(
+                        message: "pitch_0.1 .G2 . pitch_1.0 . . . . . .",
+                        translation: "<b><color=#727472>[ВОУС]</color></b>: Объект-008 был перекрыт, распространение патогена прекращено.",
+                        isHeld: false,
+                        isNoisy: false,
+                        isSubtitles: true);
+                });
                 response = "Распространение SCP-008 прекращено.";
             }
             else
@@ -34,7 +42,15 @@ namespace VeryUsualDay.Commands
                 Timing.RunCoroutine(VeryUsualDay.Instance._008_poisoning(), "_008_poisoning");
                 Door.Get(DoorType.Scp106Primary).Lock(float.PositiveInfinity, DoorLockType.AdminCommand);
                 VeryUsualDay.Instance.Is008Leaked = true;
-                Exiled.API.Features.Cassie.DelayedMessage("<b><color=#C50000>[ВНИМАНИЕ]</color></b> В зонах содержания зафиксировано распространение аномальной инфекции. Заражение перешло в активную стадию. Всем боевым единицам ликвидировать аномалии <size=0> pitch_0.2 .G1 .G1 . .G6 .", 1f, isSubtitles: true, isNoisy: false);
+                Timing.CallDelayed(1f, () =>
+                {
+                    Exiled.API.Features.Cassie.MessageTranslated(
+                        message: "<size=0>pitch_0.2 .G1 .G1 . .G6 .",
+                        translation: "<b><color=#C50000>[ВНИМАНИЕ]</color></b> В зонах содержания зафиксировано распространение аномальной инфекции. Заражение перешло в активную стадию. Всем боевым единицам ликвидировать аномалии.",
+                        isHeld: false,
+                        isNoisy: false,
+                        isSubtitles: true);
+                });
                 response = "Распространение SCP-008 начато.";
             }
             return true;
