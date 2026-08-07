@@ -18,7 +18,7 @@ namespace VeryUsualDay.Commands
                 response = "Режим FX не включён";
                 return false;
             }
-            Exiled.API.Features.Cassie.MessageTranslated(message: "pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .", translation: "<b><color=#EE7600>[Заказ прибыл]</color>: аномальные объекты </color></b>", isNoisy: false, isSubtitles: true, isHeld: false);
+            Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.4 .G1 . . .G1 .G1 $PITCH_1.00 . . . . . . . . . . . . . .", translation: "<b><color=#EE7600>[Заказ прибыл]</color>: аномальные объекты </color></b>", isNoisy: false, isSubtitles: true, isHeld: false);
             response = "CASSIE успешно вызвано.";
             return true;
         }

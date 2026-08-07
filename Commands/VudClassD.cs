@@ -40,12 +40,12 @@ namespace VeryUsualDay.Commands
             }
             if (cnt == 1)
             {
-                Exiled.API.Features.Cassie.MessageTranslated(message: ". . . . . . . . . . . . . . . . . . . . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок D.", isNoisy: false, isSubtitles: true, isHeld: false);
+                Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.65 .G5 .G5 . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок-D.", isNoisy: false, isSubtitles: true, isHeld: false);
                 response = "Испытуемый заспавнен успешно!";
             }
             else
             {
-                Exiled.API.Features.Cassie.MessageTranslated(message: ". . . . . . . . . . . . . . . . . . . . . .", translation: $"<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: <b><color=#50C878>{cnt}</b></color> испытуемых прибыло в блок D.", isNoisy: false, isSubtitles: true, isHeld: false);
+                Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.65 .G5 .G5 . . .", translation: $"<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: <b><color=#50C878>{cnt}</b></color> испытуемых прибыло в блок-D.", isNoisy: false, isSubtitles: true, isHeld: false);
                 response = "Испытуемые заспавнены успешно!";
             }
             return true;

@@ -29,7 +29,7 @@ namespace VeryUsualDay.Commands
                 Timing.CallDelayed(1f, () =>
                 {
                     Exiled.API.Features.Cassie.MessageTranslated(
-                        message: "pitch_0.1 .G2 . pitch_1.0 . . . . . .",
+                        message: "$PITCH_0.1 .G2 . $PITCH_1.0 . . . . . .",
                         translation: "<b><color=#727472>[ВОУС]</color></b>: Объект-008 был перекрыт, распространение патогена прекращено.",
                         isHeld: false,
                         isNoisy: false,
@@ -45,7 +45,7 @@ namespace VeryUsualDay.Commands
                 Timing.CallDelayed(1f, () =>
                 {
                     Exiled.API.Features.Cassie.MessageTranslated(
-                        message: "<size=0>pitch_0.2 .G1 .G1 . .G6 .",
+                        message: "$PITCH_0.2 .G1 .G1 . .G6 .",
                         translation: "<b><color=#C50000>[ВНИМАНИЕ]</color></b> В зонах содержания зафиксировано распространение аномальной инфекции. Заражение перешло в активную стадию. Всем боевым единицам ликвидировать аномалии.",
                         isHeld: false,
                         isNoisy: false,

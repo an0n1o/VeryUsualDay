@@ -36,7 +36,7 @@ namespace VeryUsualDay.Commands
                 pos.y += 1f;
                 player.Teleport(pos);
             }
-            Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . pitch_0.2 .G5 . . . . .", translation: "<b><color=#EE7600>[ПЕРСОНАЛ]</color></b> сотрудники прибыли на поверхность комплекса.", isNoisy: false, isSubtitles: true, isHeld: false);
+            Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.2 .G5 . . . . .", translation: "<b><color=#EE7600>[ПЕРСОНАЛ]</color></b> сотрудники прибыли на поверхность комплекса.", isNoisy: false, isSubtitles: true, isHeld: false);
             response = "Персонал заспавнен";
             return true;
         }

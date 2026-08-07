@@ -46,7 +46,7 @@ namespace VeryUsualDay.Commands
                             new Quaternion());
                     }
                     Exiled.API.Features.Cassie.MessageTranslated(
-                        message: "pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
+                        message: "$PITCH_0.4 .G1 . . .G1 .G1 $PITCH_1.00 . . . . . . . . . . . . . .",
                         translation: "<b><color=#EE7600>[Заказ прибыл]</color>: медикаменты </color></b>",
                         isNoisy: false, isSubtitles: true, isHeld: false);
                     break;
@@ -92,7 +92,7 @@ namespace VeryUsualDay.Commands
                         Pickup.CreateAndSpawn(ItemType.Medkit, VeryUsualDay.Instance.SupplyBoxCoords, new Quaternion());
                     }
                     Exiled.API.Features.Cassie.MessageTranslated(
-                       message: "pitch_0.4 .G1 . . .G1 .G1 pitch_1.00 . . . . . . . . . . . . . .",
+                       message: "$PITCH_0.4 .G1 . . .G1 .G1 $PITCH_1.00 . . . . . . . . . . . . . .",
                        translation: "<b><color=#EE7600>[Заказ прибыл]</color>: питание </color></b>",
                        isNoisy: false, isSubtitles: true, isHeld: false);
                     break;
@@ -116,7 +116,7 @@ namespace VeryUsualDay.Commands
                         Pickup.CreateAndSpawn(ItemType.Ammo9x19, _coords, new Quaternion());
                     }
                     Exiled.API.Features.Cassie.MessageTranslated(
-                        message: "pitch_0.4 .G1",
+                        message: "$PITCH_0.4 .G1",
                         translation: "<b><color=#727472>[СБ]</color>: запасы были пополнены.",
                         isNoisy: false, isSubtitles: true, isHeld: false);
                     break;

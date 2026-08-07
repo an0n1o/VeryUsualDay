@@ -27,7 +27,7 @@ namespace VeryUsualDay.Commands
                     door.IsOpen = false;
                 }
             }
-            Exiled.API.Features.Cassie.MessageTranslated(message: "pitch_0.6 .g1 pitch_1.0 . . . . . . . . . . . . .", translation: "<b><color=#727472>[Обновление]</b></color> система дверей была перезапущена.", isNoisy: false, isSubtitles: true, isHeld: false);
+            Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.6 .G1 $PITCH_1.0 . . . . . . . . . . . . .", translation: "<b><color=#727472>[Обновление]</b></color> система дверей была перезапущена.", isNoisy: false, isSubtitles: true, isHeld: false);
             response = "Система дверей перезапущена!";
             return true;
         }

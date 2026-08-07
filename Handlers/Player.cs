@@ -132,7 +132,7 @@ namespace VeryUsualDay.Handlers
                 !ev.Pickup.Type.IsWeapon() || VeryUsualDay.Instance.ScpPlayers.ContainsKey(ev.Player.Id)) return;
             VeryUsualDay.Instance.CurrentCode = VeryUsualDay.Codes.Blue;
             Exiled.API.Features.Cassie.MessageTranslated(
-               message: "pitch_0.1 .G1 .G2 . pitch_1.0 . . . . . . . . . . . . . .",
+               message: "$PITCH_0.1 .G1 .G2 . $PITCH_1.0 . . . . . . . . . . . . . .",
                translation: "<b><color=#727472>[Рабочий режим]</color></b>: объявлен <color=#005EBC>Синий Код</color>. Зафиксированы малые нарушения. Персоналу следует принимать меры предосторожности.",
                isNoisy: false, isSubtitles: true, isHeld: false);
         }
@@ -324,7 +324,7 @@ namespace VeryUsualDay.Handlers
                 if (ev.Player.Health <= 2000f)
                 {
                     ev.Player.IsGodModeEnabled = true;
-                    Exiled.API.Features.Cassie.MessageTranslated(message: "pitch_0.1 .G2 . pitch_1.0 . . . . . . . . . . . . . .", translation: "<b><color=#727472>[ВОУС]</color></b>: Объект-035 ослаб и доступен для транспортировки в камеру содержания", isNoisy: false, isSubtitles: true, isHeld: false);
+                    Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.1 .G2 . $PITCH_1.0 . . . . . . . . . . . . . .", translation: "<b><color=#727472>[ВОУС]</color></b>: Объект-035 ослаб и доступен для транспортировки в камеру содержания", isNoisy: false, isSubtitles: true, isHeld: false);
                     ev.Player.Broadcast(5, "<b>Вы ослабли и не можете навредить людям!</b>");
                 }
                 return;
