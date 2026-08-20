@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
-
+using Exiled.API.Features.Doors;
+using MEC;
+using PlayerRoles;
 namespace VeryUsualDay.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -11,7 +15,6 @@ namespace VeryUsualDay.Commands
         public string Command => "setcode";
         public string[] Aliases => new [] { "code" };
         public string Description => "Установить код в комплексе. Используется для FX.";
-
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!VeryUsualDay.Instance.IsEnabledInRound)
@@ -19,9 +22,14 @@ namespace VeryUsualDay.Commands
                 response = "Режим FX не включён!";
                 return false;
             }
+            if (VeryUsualDay.Instance.IsCleanCountdownActive)
+            {
+                response = "Невозможно изменить рабочий режим без подготовки к штатному режиму.";
+                return false;
+            }
             if (arguments.Count != 1)
             {
-                response = "Формат команды: setcode <название>. Допустимые названия: green, emerald, blue, orange, yellow, red.";
+                response = "Формат команды: setcode <название>. Допустимые названия: green, emerald, blue, orange, yellow, red, clean.";
                 return false;
             }
             switch (arguments.ToArray()[0])
@@ -64,8 +72,43 @@ namespace VeryUsualDay.Commands
                     Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.1 .G5 . .G5 . .G5 . .G1 . $PITCH_1.0 . . . . . . . . . . . . . .", translation: "<b><color=#727472>[Рабочий режим]</color></b>: объявлен <color=#C50000>Красный Код</color>. Всем мирным сотрудникам пройти на поверхность до устранения основных угроз. Всем боевым единицам принять действия устранения опасности.", isSubtitles: true, isNoisy: false, isHeld: false);
                     response = "Установлен код \"Красный\"!";
                     return true;
+                case "clean":
+                    VeryUsualDay.Instance.CurrentCode = VeryUsualDay.Codes.Clean;
+                    VeryUsualDay.Instance.IsCleanCountdownActive = true;
+                    Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.25 .G1 $PITCH_1.0 . . . $PITCH_0.25 .G1 $PITCH_1.0 . . . $PITCH_$PITCH_0.25 .G1 $PITCH_1.0 . . . $PITCH_0.20 .G1 $PITCH_0.15 .G1 $PITCH_0.10 .G3 $PITCH_0.05 . $PITCH_0.03 .G6   $PITCH_1.0 . . . . . . . . . . . . . .", translation: "<b><color=#727472>[Рабочий режим]</color></b>: объявлен <color=#00FFFF>Код Очистки</color>. Всему персоналу забраться в доступные укрытия (<color=#EFC01A>ГР18/Камера079</color>) во избежание смертельного отравления газом. Минимальное время для исполнения - <color=#EE7600>5 минут</color>. Пробравшиеся в помещения аномалии погибнут. Нахождение на поверхности не спасёт.", isSubtitles: true, isNoisy: false, isHeld: false);
+                    response = "Установлен код \"Очистка\"!";
+                    Timing.CallDelayed(300f, () =>
+                    {
+
+                           foreach (var door in Door.List)
+                            {
+                                door.IsOpen = false;
+                                door.Lock(DoorLockType.AdminCommand);
+                            }
+
+                        Map.TurnOffAllLights(float.MaxValue);
+
+                        foreach (var player in Player.List)
+                        {
+                            if (player.Role.Type == RoleTypeId.Tutorial &&
+                                player.CustomInfo == "Человек")
+                                continue;
+
+                            if (player.CurrentRoom == null)
+                                continue;
+
+                            if (player.CurrentRoom.Type == RoomType.Hcz079 ||
+                                player.CurrentRoom.Type == RoomType.LczGlassBox)
+                                continue;
+
+                            player.EnableEffect(EffectType.Decontaminating);
+                        }
+
+                        Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.01 .G6 .", translation: "<b><color=#960018>[ЛОКДАУН]</b></color>", isSubtitles: true, isNoisy: false, isHeld: false);
+                    });
+                    return true;
                 default:
-                    response = "Формат команды: setcode <название>. Допустимые названия: green, emerald, blue, yellow, red.";
+                    response = "Формат команды: setcode <название>. Допустимые названия: green, emerald, blue, yellow, red, clean.";
                     return false;
             }
         }

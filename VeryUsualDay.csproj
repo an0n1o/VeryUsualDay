@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	  <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B9AF89CA-8F81-4364-92D7-6D699CED4E56}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -74,6 +74,7 @@
     <Compile Include="Abilities\Scp035\BodyTakeoverAbility.cs" />
     <Compile Include="Abilities\Scp035\MemeticsAbility.cs" />
     <Compile Include="Commands\Aban.cs" />
+    <Compile Include="Commands\AfterClean.cs" />
     <Compile Include="Commands\AllowSpawn.cs" />
     <Compile Include="Commands\AShield.cs" />
     <Compile Include="Commands\Breach019.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Commands\ClassD.cs" />
     <Compile Include="Commands\Cuff.cs" />
     <Compile Include="Commands\CustomHelp.cs" />
+    <Compile Include="Commands\GateGuard.cs" />
     <Compile Include="Commands\GoComplex.cs" />
     <Compile Include="Commands\HShield.cs" />
     <Compile Include="Commands\Lock049Gate.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Commands\ShakhedBoom.cs" />
     <Compile Include="Commands\Spawn0082.cs" />
     <Compile Include="Commands\Spawn01922.cs" />
+    <Compile Include="Commands\Spawn01923.cs" />
     <Compile Include="Commands\Spawn035.cs" />
     <Compile Include="Commands\SetCode.cs" />
     <Compile Include="Commands\Spawn0352.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Utils\Scp0082.cs" />
     <Compile Include="Utils\Scp01921.cs" />
     <Compile Include="Utils\Scp01922.cs" />
+    <Compile Include="Utils\Scp01923.cs" />
     <Compile Include="Utils\Scp035.cs" />
     <Compile Include="Utils\Scp035Old.cs" />
     <Compile Include="Utils\Scp0352.cs" />

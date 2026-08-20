@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -12,6 +14,7 @@ using PlayerRoles;
 using UnityEngine;
 using VeryUsualDay.Abilities.Scp035;
 using VeryUsualDay.Utils;
+using Exiled.API.Features.Doors;
 
 namespace VeryUsualDay.Handlers
 {
@@ -65,6 +68,8 @@ namespace VeryUsualDay.Handlers
                         ev.Player.ChangeEffectIntensity(EffectType.SilentWalk, 10);
                         ev.Player.IsGodModeEnabled = false;
                         ev.Player.CustomName = "Объект";
+                        ev.Player.SessionVariables["memeticsDeathCooldown"] =
+    DateTime.UtcNow.AddSeconds(5);
                     });
                     return;
                 }
@@ -160,7 +165,7 @@ namespace VeryUsualDay.Handlers
             {
                 if (!VeryUsualDay.Instance.ScpPlayers.TryGetValue(ev.Attacker.Id, out var avel) ||
                     avel != VeryUsualDay.Scps.Scp0762) return; // checks if attacker is not avel
-                if (ev.Player != null && Random.Range(0, 100) < 40) ev.Attacker.Heal(25f);
+                if (ev.Player != null && UnityEngine.Random.Range(0, 100) < 40) ev.Attacker.Heal(25f);
                 if (ev.Attacker.CurrentItem.As<Jailbird>()?.WearState != JailbirdWearState.AlmostBroken) return;
                 ev.Attacker.CurrentItem?.Destroy();
                 var jailbird = ev.Attacker.AddItem(ItemType.Jailbird);
@@ -389,8 +394,59 @@ namespace VeryUsualDay.Handlers
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!VeryUsualDay.Instance.IsEnabledInRound) return;
-            if (ev.Player.Role.Type == RoleTypeId.Scp0492 && ev.Door.IsOpen)
+            if (!VeryUsualDay.Instance.IsEnabledInRound)
+                return;
+
+            // GateGuard
+            if (VeryUsualDay.Instance.IsGateGuardEnabled &&
+                ev.Door.Type == DoorType.GateA &&
+                !ev.Door.IsOpen)
+            {
+                if (VeryUsualDay.Instance.GateBusy)
+                {
+                    ev.IsAllowed = false;
+                    return;
+                }
+
+                var item = ev.Player.CurrentItem;
+
+                if (item != null &&
+                    (item.Type == ItemType.KeycardMTFOperative ||
+                     item.Type == ItemType.KeycardMTFCaptain))
+                {
+                    var door = ev.Door;
+
+                    ev.IsAllowed = false;
+
+                    VeryUsualDay.Instance.GateBusy = true;
+
+                    door.IsOpen = true;
+
+                    Timing.CallDelayed(5f, () =>
+                    {
+                        if (VeryUsualDay.Instance == null ||
+                            !VeryUsualDay.Instance.IsGateGuardEnabled)
+                        {
+                            return;
+                        }
+
+                        door.IsOpen = false;
+
+                        Timing.CallDelayed(3.5f, () =>
+                        {
+                            if (VeryUsualDay.Instance == null)
+                                return;
+
+                            VeryUsualDay.Instance.GateBusy = false;
+                        });
+                    });
+
+                    return;
+                }
+            }
+
+            if (ev.Player.Role.Type == RoleTypeId.Scp0492 &&
+                ev.Door.IsOpen)
             {
                 ev.IsAllowed = false;
             }
@@ -404,6 +460,57 @@ namespace VeryUsualDay.Handlers
             {
                 ev.IsAllowed = false;
             }
+        }
+        public static void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        {
+            if (!VeryUsualDay.Instance.IsEnabledInRound)
+                return;
+
+            if (ev.Player.CustomInfo != "<b><color=#960018>SCP-035</color></b>" && ev.Player.CustomInfo != "<b><color=#960018>SCP-682-MT</color></b>")
+                return;
+
+            if (!(ev.Effect is Flashed))
+                return;
+
+            ev.IsAllowed = false;
+        }
+        public static void OnSentValidCommand(SentValidCommandEventArgs ev)
+        {
+            if (!ev.Result)
+                return;
+
+            if (!VeryUsualDay.Instance.IsGateGuardEnabled)
+                return;
+
+            if (ev.Command == null)
+                return;
+
+            if (!string.Equals(
+                    ev.Command.Command,
+                    "setcode",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            string[] queryParts = ev.Query.Split(
+                new[] { ' ' },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            if (queryParts.Length == 0)
+                return;
+
+            string codeName = queryParts[queryParts.Length - 1];
+
+            if (!string.Equals(
+                    codeName,
+                    "green",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            VeryUsualDay.Instance.DisableGateGuard();
         }
     }
 }

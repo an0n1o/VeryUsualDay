@@ -13,6 +13,7 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Items.Keycards;
 using Exiled.API.Features.Pickups;
 using Interactables.Interobjects.DoorUtils;
+using Exiled.API.Features.Doors;
 using MEC;
 using Newtonsoft.Json;
 using PlayerRoles;
@@ -39,6 +40,9 @@ namespace VeryUsualDay
         public bool IsDboysSpawnAllowed { get; set; }
         public bool IsTeslaEnabled { get; set; }
         public bool Is008Leaked { get; set; }
+        public bool IsGateGuardEnabled { get; set; }
+        public bool GateBusy { get; set; }
+        public bool IsCleanCountdownActive { get; set; } = false;
         public List<int> JoinedDboys { get; set; } = new List<int>();
         public List<int> DBoysQueue { get; set; } = new List<int>();
         public List<int> Shakheds { get; set; } = new List<int>();
@@ -57,7 +61,7 @@ namespace VeryUsualDay
         public Vector3 SupplyBoxCoords = new Vector3();
         public Vector3 VaseCoords = new Vector3();
 
-        public static readonly HeaderSetting SettingsHeader = new HeaderSetting(1, "Foundation-X");
+        public static readonly HeaderSetting SettingsHeader = new HeaderSetting(100, "Foundation-X");
         
         public Pickup Vase;
 
@@ -80,7 +84,9 @@ namespace VeryUsualDay
             [Description("Жёлтый")]
             Yellow,
             [Description("Красный")]
-            Red
+            Red,
+            [Description("Очистка")]
+            Clean
         }
 
         public enum Scps
@@ -88,6 +94,7 @@ namespace VeryUsualDay
             Scp0082,
             Scp01921,
             Scp01922,
+            Scp01923,
             Scp035,
             Scp035Old,
             Scp0352,
@@ -120,7 +127,9 @@ namespace VeryUsualDay
             PlayerHandler.Handcuffing += Player.OnHandcuffing;
             PlayerHandler.InteractingDoor += Player.OnInteractingDoor;
             PlayerHandler.ChangingItem += Player.OnChangingItem;
-            
+            PlayerHandler.ReceivingEffect += Player.OnReceivingEffect;
+            PlayerHandler.SentValidCommand += Player.OnSentValidCommand;
+
             ServerHandler.WaitingForPlayers += Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted += Server.OnRoundStarted;
 
@@ -145,13 +154,15 @@ namespace VeryUsualDay
             PlayerHandler.Handcuffing -= Player.OnHandcuffing;
             PlayerHandler.InteractingDoor -= Player.OnInteractingDoor;
             PlayerHandler.ChangingItem -= Player.OnChangingItem;
-            
+            PlayerHandler.ReceivingEffect -= Player.OnReceivingEffect;
+            PlayerHandler.SentValidCommand += Player.OnSentValidCommand;
+
             ServerHandler.WaitingForPlayers -= Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted -= Server.OnRoundStarted;
-            
+
             // Exiled.Events.Handlers.Scp049.Attacking -= Handlers.Scp049.OnAttacking;
         }
-        
+
         public override void OnEnabled()
         {
             Instance = this;
@@ -465,6 +476,11 @@ namespace VeryUsualDay
                         {
                             player.AddAmmo(ammo, 60);
                         }
+                        foreach (var pair in Instance.Config.OVBEffects[json[4]])
+                        {
+                            player.EnableEffect(pair.Key);
+                            player.ChangeEffectIntensity(pair.Key, pair.Value);
+                        }
                         player.MaxHealth = Instance.Config.AgencyHealth;
                         player.Health = Instance.Config.AgencyHealth;
                         player.IsGodModeEnabled = false;
@@ -550,7 +566,7 @@ namespace VeryUsualDay
 
             player.EnableEffect(EffectType.SoundtrackMute);
         }
-        
+
         public void RoleDistribution()
         {
             foreach (var player in Exiled.API.Features.Player.Get(RoleTypeId.Tutorial))
@@ -558,6 +574,34 @@ namespace VeryUsualDay
                 if ((!player.TryGetSessionVariable("isInPrison", out bool prisonState) || !prisonState) && (player.CustomInfo == "Человек" || player.CustomInfo is null))
                 {
                     SetUserRole(player);
+                }
+            }
+        }
+        public void EnableGateGuard()
+        {
+            IsGateGuardEnabled = true;
+            GateBusy = false;
+
+            foreach (var door in Door.List)
+            {
+                if (door.Type != DoorType.GateA)
+                    continue;
+
+                door.Lock(DoorLockType.AdminCommand);
+                door.IsOpen = false;
+            }
+        }
+
+        public void DisableGateGuard()
+        {
+            IsGateGuardEnabled = false;
+            GateBusy = false;
+
+            foreach (var door in Door.List)
+            {
+                if (door.Type == DoorType.GateA)
+                {
+                    door.Unlock();
                 }
             }
         }

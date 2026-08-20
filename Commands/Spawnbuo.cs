@@ -47,6 +47,12 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Ammo12Gauge, 28);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
                         player.CustomInfo = "(Боец БУО)";
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 35);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 35);
+                        player.EnableEffect(EffectType.MovementBoost);
+                        player.ChangeEffectIntensity(EffectType.MovementBoost, 15);
                         player.Broadcast(15, "<color=#708090><b>Вы стали бойцом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
@@ -63,11 +69,17 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Nato556, 100);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
                         player.CustomInfo = "(Сержант БУО)";
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 35);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 35);
+                        player.EnableEffect(EffectType.MovementBoost);
+                        player.ChangeEffectIntensity(EffectType.MovementBoost, 15);
                         player.Broadcast(15, "<color=#708090><b>Вы стали сержантом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
                 }
-                else if (randomRole <= 0.85f)
+                else if (randomRole <= 0.90f)
                 {
                     player.Role.Set(RoleTypeId.ChaosMarauder, RoleSpawnFlags.AssignInventory);
                     Timing.CallDelayed(2f, () =>
@@ -79,6 +91,12 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Nato762, 200);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
                         player.CustomInfo = "(Джаггернаут БУО)";
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 35);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 35);
+                        player.EnableEffect(EffectType.MovementBoost);
+                        player.ChangeEffectIntensity(EffectType.MovementBoost, 15);
                         player.Broadcast(15, "<color=#708090><b>Вы стали джаггернаутом <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });
@@ -94,9 +112,14 @@ namespace VeryUsualDay.Commands
                         player.AddAmmo(AmmoType.Nato556, 120);
                         player.CustomName = $"БУО #{VeryUsualDay.Instance.BuoCounter} - ##-{peopleCounter}";
                         player.CustomInfo = "(Ликвидатор БУО)";
-                        player.EnableEffect(EffectType.BodyshotReduction, 10);
-                        player.EnableEffect(EffectType.DamageReduction, 10);
-                        player.EnableEffect(EffectType.Vitality, 10);
+                        player.EnableEffect(EffectType.Vitality);
+                        player.ChangeEffectIntensity(EffectType.Vitality, 10);
+                        player.EnableEffect(EffectType.DamageReduction);
+                        player.ChangeEffectIntensity(EffectType.DamageReduction, 35);
+                        player.EnableEffect(EffectType.BodyshotReduction);
+                        player.ChangeEffectIntensity(EffectType.BodyshotReduction, 35);
+                        player.EnableEffect(EffectType.MovementBoost);
+                        player.ChangeEffectIntensity(EffectType.MovementBoost, 15);
                         player.Broadcast(15, "<color=#708090><b>Вы стали ликвидатором <color=#138808>Боевого Ударного Отряда<color=#708090>. Спасите <color=#ffd800>сотрудников фонда<color=#708090>, устраните <color=red>угрозу<color=#708090> в комплексе и <color=#120a8f>выполните миссию<color=#708090>!");
                         peopleCounter += 1;
                     });

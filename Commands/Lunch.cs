@@ -28,6 +28,7 @@ namespace VeryUsualDay.Commands
             {
                 if (!VeryUsualDay.Instance.IsLunchtimeActive) return;
                 Exiled.API.Features.Cassie.MessageTranslated(message: "$PITCH_0.4 .G3 $PITCH_1.0. . . .", translation: "<b><color=#EE7600>Перерыв окончен!</color></b>", isNoisy: false, isSubtitles: true, isHeld: false);
+                VeryUsualDay.Instance.IsLunchtimeActive = false;
             });
             response = "Обед объявлен!";
             return true;

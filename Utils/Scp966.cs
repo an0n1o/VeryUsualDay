@@ -22,10 +22,12 @@ namespace VeryUsualDay.Utils
             Timing.CallDelayed(2f, () =>
             {
                 User.CustomInfo = "<b><color=#960018>SCP-966</color></b>";
-                User.MaxHealth = 1000f;
-                User.Health = 1000f;
-                User.Scale = new Vector3(0f, 1f, 0f);
+                User.MaxHealth = 2000f;
+                User.Health = 2000f;
+                User.Scale = new Vector3(1f, 1f, 1f);
                 User.IsGodModeEnabled = false;
+                User.EnableEffect(EffectType.Fade);
+                User.ChangeEffectIntensity(EffectType.Fade, 255);
                 VeryUsualDay.Instance.ScpPlayers.Add(User.Id, VeryUsualDay.Scps.Scp966);
             });
 

@@ -340,11 +340,11 @@ namespace VeryUsualDay
         {
             {
                 "Рабочий",
-                110f
+                175f
             },
             {
                 "Старший рабочий",
-                110f
+                175f
             }
         };
 
@@ -358,7 +358,15 @@ namespace VeryUsualDay
                     {
                         {
                             EffectType.MovementBoost,
-                            1
+                            5
+                        },
+                        {
+                            EffectType.BodyshotReduction,
+                            15
+                        },
+                        {
+                            EffectType.DamageReduction,
+                            15
                         }
                     }
                 },
@@ -368,10 +376,18 @@ namespace VeryUsualDay
                     {
                         {
                             EffectType.MovementBoost,
-                            1
+                            5
+                        },
+                        {
+                            EffectType.BodyshotReduction,
+                            15
+                        },
+                        {
+                            EffectType.DamageReduction,
+                            15
                         }
                     }
-                }
+                },
             };
         
         [Description("Список ролей для ГОР (Dictionary<string, RoleTypeId>)")]
@@ -687,6 +703,54 @@ namespace VeryUsualDay
             }
         };
 
+        [Description("Список эффектов для ОВБ (Dictionary<string, Dictionary<EffectType, byte>>)")]
+        public Dictionary<string, Dictionary<EffectType, byte>> OVBEffects { get; set; } =
+            new Dictionary<string, Dictionary<EffectType, byte>>
+            {
+                {
+                    "Младший агент",
+                    new Dictionary<EffectType, byte>
+                    {
+                        {
+                            EffectType.BodyshotReduction,
+                            30
+                        },
+                        {
+                            EffectType.DamageReduction,
+                            30
+                        }
+                    }
+                },
+                {
+                    "Агент",
+                    new Dictionary<EffectType, byte>
+                    {
+                        {
+                            EffectType.BodyshotReduction,
+                            30
+                        },
+                        {
+                            EffectType.DamageReduction,
+                            30
+                        }
+                    }
+                },
+                                {
+                    "Старший агент",
+                    new Dictionary<EffectType, byte>
+                    {
+                        {
+                            EffectType.BodyshotReduction,
+                            30
+                        },
+                        {
+                            EffectType.DamageReduction,
+                            30
+                        }
+                    }
+                }
+            };
+
         [Description("Список вещей для административного персонала (Dictionary<string, List<ItemType>>)")]
         public Dictionary<string, List<ItemType>> AdministrativeItems { get; set; } = new Dictionary<string, List<ItemType>>
         {
@@ -785,7 +849,8 @@ namespace VeryUsualDay
             ItemType.Medkit,
             ItemType.Painkillers,
             ItemType.ArmorCombat,
-            ItemType.Radio
+            ItemType.Radio,
+            ItemType.KeycardMTFOperative
         };
         
         [Description("Инвентарь сержанта БУО (List<ItemType>)")]
@@ -796,7 +861,8 @@ namespace VeryUsualDay
             ItemType.Medkit,
             ItemType.Painkillers,
             ItemType.ArmorCombat,
-            ItemType.Radio
+            ItemType.Radio,
+            ItemType.KeycardMTFOperative
         };
         
         [Description("Инвентарь джаггернаута БУО (List<ItemType>)")]
@@ -807,7 +873,8 @@ namespace VeryUsualDay
             ItemType.Medkit,
             ItemType.Painkillers,
             ItemType.ArmorCombat,
-            ItemType.Radio
+            ItemType.Radio,
+            ItemType.KeycardMTFOperative
         };
         
         [Description("Инвентарь ликвидатора БУО (List<ItemType>)")]
@@ -819,7 +886,8 @@ namespace VeryUsualDay
             ItemType.GunFRMG0,
             ItemType.Adrenaline,
             ItemType.SCP500,
-            ItemType.ArmorHeavy
+            ItemType.ArmorHeavy,
+            ItemType.KeycardMTFOperative
         };
 
         [Description("Список ролей, на которые не распростроняется инфекция SCP-008 (List<RoleTypeId>)")]

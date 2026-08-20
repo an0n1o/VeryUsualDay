@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using MEC;
@@ -44,18 +45,19 @@ namespace VeryUsualDay.Abilities.Scp035
             player.Position = target.Position;
             player.MaxHealth = 220f;
             player.Health = 220f;
-            
-            foreach (var item in target.Items)
+
+            foreach (var item in target.Items.ToList())
             {
-                player.AddItem(item.CreatePickup(Vector3.zero));
+                player.AddItem(item.Type);
             }
+
             player.AddAmmo(AmmoType.Nato9, target.GetAmmo(AmmoType.Nato9));
             player.AddAmmo(AmmoType.Nato556, target.GetAmmo(AmmoType.Nato556));
             player.AddAmmo(AmmoType.Nato762, target.GetAmmo(AmmoType.Nato762));
             player.AddAmmo(AmmoType.Ammo12Gauge, target.GetAmmo(AmmoType.Ammo12Gauge));
             player.AddAmmo(AmmoType.Ammo44Cal, target.GetAmmo(AmmoType.Ammo44Cal));
 
-            target.ClearInventory(destroy: false);
+            target.ClearInventory(destroy: true);
             player.EnableEffect(EffectType.Bleeding, 1);
             player.EnableEffect(EffectType.DamageReduction, 10);
             player.IsGodModeEnabled = true;

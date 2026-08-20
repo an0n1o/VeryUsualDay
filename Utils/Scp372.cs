@@ -22,8 +22,8 @@ namespace VeryUsualDay.Utils
             Timing.CallDelayed(2f, () =>
             {
                 User.CustomInfo = "<b><color=#960018>SCP-372</color></b>";
-                User.MaxHealth = 650f;
-                User.Health = 650f;
+                User.MaxHealth = 2500f;
+                User.Health = 2500f;
                 User.Scale = new Vector3(0.1f, 0.8f, 1f);
                 User.EnableEffect(EffectType.MovementBoost);
                 User.ChangeEffectIntensity(EffectType.MovementBoost, 255);
