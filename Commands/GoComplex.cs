@@ -2,6 +2,7 @@
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
+using UnityEngine;
 
 namespace VeryUsualDay.Commands
 {
@@ -36,7 +37,7 @@ namespace VeryUsualDay.Commands
                 pos.y += 1f;
                 player.Teleport(pos);
             }
-            Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.2 .G5 . . . . .", translation: "<b><color=#EE7600>[ПЕРСОНАЛ]</color></b> сотрудники прибыли на поверхность комплекса.", isNoisy: false, isSubtitles: true, isHeld: false);
+            Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.2 .G5 . . . . .", translation: "< color =#eb8f34>[</color><color=#808080>📷</color><color=#eb8f34>] </color><color=#eb8f34>Система <size=0><size=25>Контроля Входа</color>\r\n\r\n< b >|< color =#008080>🚨</color><color=#BC8F8F>👤</color><b>|</color></b></b> Сотрудники прибыли в комплекс.", isNoisy: false, isSubtitles: true, isHeld: false);
             response = "Персонал заспавнен";
             return true;
         }

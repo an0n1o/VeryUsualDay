@@ -2,6 +2,7 @@
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
+using UnityEngine;
 
 namespace VeryUsualDay.Commands
 {
@@ -38,16 +39,8 @@ namespace VeryUsualDay.Commands
                     return false;
                 }
             }
-            if (cnt == 1)
-            {
-                Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.65 .G5 .G5 . . .", translation: "<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: один испытуемый прибыл в блок-D.", isNoisy: false, isSubtitles: true, isHeld: false);
-                response = "Испытуемый заспавнен успешно!";
-            }
-            else
-            {
-                Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . . . . . $PITCH_0.65 .G5 .G5 . . .", translation: $"<b><color=#FF0090>O5</color> >>> <color=#008080>Комплекс</color></b>: <b><color=#50C878>{cnt}</b></color> испытуемых прибыло в блок-D.", isNoisy: false, isSubtitles: true, isHeld: false);
-                response = "Испытуемые заспавнены успешно!";
-            }
+                Exiled.API.Features.Cassie.MessageTranslated(message: ".G1 . $PITCH_0.2 . . . $PITCH_1.0 .G1", translation: $"< color =#eb8f34>[</color><color=#808080>📷</color><color=#eb8f34>] </color><color=#eb8f34>Система <size=0><size=25>Контроля Входа</color>\r\n\r\n< b >|< color =#FF4500>🚨</color><color=#FF4500>👤</color><b>|</color></b></b> Персонал <color=#FF4500>Расходного класса</color> прибыл в учреждение <b>|<color=#FF4500>👤<b><color=#BDB76B>{cnt}</color></color><b>| Количество субъектов выведено на пейджер</b> |<color=#FF4500>🚚</color>| Место выгрузки: <u>Блок Испытуемых</u>", isNoisy: false, isSubtitles: true, isHeld: false);
+            response = "Испытуемый заспавнен успешно!";
             return true;
         }
     }

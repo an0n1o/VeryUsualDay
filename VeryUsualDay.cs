@@ -155,7 +155,7 @@ namespace VeryUsualDay
             PlayerHandler.InteractingDoor -= Player.OnInteractingDoor;
             PlayerHandler.ChangingItem -= Player.OnChangingItem;
             PlayerHandler.ReceivingEffect -= Player.OnReceivingEffect;
-            PlayerHandler.SentValidCommand += Player.OnSentValidCommand;
+            PlayerHandler.SentValidCommand -= Player.OnSentValidCommand;
 
             ServerHandler.WaitingForPlayers -= Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted -= Server.OnRoundStarted;
