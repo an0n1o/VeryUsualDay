@@ -2,6 +2,8 @@
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
+using VeryUsualDay.Utils;
+using VeryUsualDay.Abilities.Scp682Event;
 
 namespace VeryUsualDay.Handlers
 {
@@ -16,6 +18,7 @@ namespace VeryUsualDay.Handlers
             VeryUsualDay.Instance.Is682EventActive = false;
             VeryUsualDay.Instance.CurrentCode = VeryUsualDay.Codes.Green;
             VeryUsualDay.Instance.BuoCounter = 0;
+            VeryUsualDay.Instance.OssCounter = 0;
             VeryUsualDay.Instance.SpawnedDboysCounter = 1;
             VeryUsualDay.Instance.SpawnedWorkersCounter = 1;
             VeryUsualDay.Instance.SpawnedScientistCounter = 1;
@@ -26,6 +29,7 @@ namespace VeryUsualDay.Handlers
             VeryUsualDay.Instance.DBoysQueue.Clear();
             VeryUsualDay.Instance.ChaosRooms.Clear();
             VeryUsualDay.Instance.Shakheds.Clear();
+            Scp682EventAbilityManager.Reset();
             // Timing.KillCoroutines("_avel");
             Timing.KillCoroutines("_008_poisoning");
             Timing.KillCoroutines("_joining");

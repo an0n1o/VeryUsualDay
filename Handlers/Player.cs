@@ -14,7 +14,11 @@ using PlayerRoles;
 using UnityEngine;
 using VeryUsualDay.Abilities.Scp035;
 using VeryUsualDay.Utils;
-using Exiled.API.Features.Doors;
+using System.Linq;
+using InventorySystem.Items;
+using VeryUsualDay.Abilities.Engineer;
+using VeryUsualDay.Abilities.Medic;
+using VeryUsualDay.Abilities.Scp682Event;
 
 namespace VeryUsualDay.Handlers
 {
@@ -37,19 +41,23 @@ namespace VeryUsualDay.Handlers
         public static void OnChangingRole(ChangingRoleEventArgs ev)
         {
             if (!VeryUsualDay.Instance.IsEnabledInRound) return;
-            if (VeryUsualDay.Instance.Is682EventActive)
-            {
-                Timing.CallDelayed(1f, () =>
-                {
-                    if (VeryUsualDay.Instance == null ||
-                        !VeryUsualDay.Instance.Is682EventActive)
-                    {
-                        return;
-                    }
+            InventoryLimitsManager.Clear(ev.Player);
+            EngineerRepairAbility.CancelRepair(
+            ev.Player,
+            false);
+            EngineerRepairAbility.CancelRepair(
+            ev.Player,
+            false);
 
-                    VeryUsualDay.Instance.Apply682EventFog(ev.Player);
-                });
-            }
+            MedicReviveAbility.OnChangingRole(
+                ev.Player,
+                ev.NewRole,
+                ev.Reason);
+
+            ev.Player.SessionVariables["isEngineer"] = false;
+            ev.Player.SessionVariables["isMedic"] = false;
+            ev.Player.SessionVariables["isEngineer"] = false;
+            if (VeryUsualDay.Instance.Is682EventActive)
             ev.Player.SessionVariables.Remove("vudmood");
             if (ev.NewRole != RoleTypeId.Spectator && ev.NewRole.GetSide() != Side.Scp && (ev.NewRole != RoleTypeId.Tutorial || ev.Player.CustomName.Split(' ')[0] == "Агент"))
             {
@@ -94,11 +102,25 @@ namespace VeryUsualDay.Handlers
                     }
                 }
 
-                if (ev.Reason == SpawnReason.Died || ev.Reason == SpawnReason.Destroyed)
+                if (ev.Reason == SpawnReason.Died ||
+                    ev.Reason == SpawnReason.Destroyed)
                 {
+                    if (!MedicReviveAbility.IsWaitingForNewLife(
+                            ev.Player))
+                    {
+                        return;
+                    }
+
+                    MedicReviveAbility.MarkDeathLobbyTransition(
+                        ev.Player);
+
                     var bc =
                         "<b>Вы были перемещены в <color=purple>Обучение</color>, т.к. ивент находится в процессе.</b>";
-                    ev.Player.Role.Set(RoleTypeId.Tutorial, reason: SpawnReason.ForceClass);
+
+                    ev.Player.Role.Set(
+                        RoleTypeId.Tutorial,
+                        reason: SpawnReason.ForceClass);
+
                     ev.Player.Broadcast(10, bc);
                 }
                 else
@@ -150,8 +172,8 @@ namespace VeryUsualDay.Handlers
                 !ev.Pickup.Type.IsWeapon() || VeryUsualDay.Instance.ScpPlayers.ContainsKey(ev.Player.Id)) return;
             VeryUsualDay.Instance.CurrentCode = VeryUsualDay.Codes.Blue;
             Exiled.API.Features.Cassie.MessageTranslated(
-               message: "$PITCH_0.1 .G1 .G2 . $PITCH_1.0 . . . . . . . . . . . . . .",
-               translation: "<b><color=#727472>[Рабочий режим]</color></b>: объявлен <color=#005EBC>Синий Код</color>. Зафиксированы малые нарушения. Персоналу следует принимать меры предосторожности.",
+               message: "$PITCH_0.15 .G1 .G1 . . .G2 . $PITCH_1.0 . . .",
+               translation: "[<color=#eb8f34>🔊</color>] <b><color=#eb8f34>А.С.К.К.</color></b>\r\n\r\n<b><color=#727472>[Система Предупреждения]</color></b> <color=#005EBC>🔲</color>\r\n\r\n<b>|<color=#727472>🏰</color><color=#005EBC>🔲</color>| Зафиксированы малые нарушения, объявлен <color=#005EBC><u>Синий Код</color></u>\r\n|<color=#696969>🔫</color><color=#696969>👤</color>| Службе Безопасности вести активный патруль зон для подавления нарушений\r\n|<color=#BC8F8F>👤</color><color=#FFD700>❕</color>| Мирному персоналу покинуть Зону Тяжёлого Содержания, если нет причин оставаться в ней",
                isNoisy: false, isSubtitles: true, isHeld: false);
         }
 
@@ -174,6 +196,15 @@ namespace VeryUsualDay.Handlers
         public static void OnHurting(HurtingEventArgs ev)
         {
             if (!VeryUsualDay.Instance.IsEnabledInRound) return;
+            if (ev.Attacker != null &&
+             VeryUsualDay.Instance.ScpPlayers.TryGetValue(
+             ev.Attacker.Id,
+             out VeryUsualDay.Scps attackerScp) &&
+             attackerScp == VeryUsualDay.Scps.Scp682Event &&
+             ev.DamageHandler.Type == DamageType.Scp939)
+            {
+                ev.Amount *= 2f;
+            }
             try
             {
                 if (!VeryUsualDay.Instance.ScpPlayers.TryGetValue(ev.Attacker.Id, out var avel) ||
@@ -192,18 +223,44 @@ namespace VeryUsualDay.Handlers
 
         public static void OnDying(DyingEventArgs ev)
         {
-            if (!VeryUsualDay.Instance.IsEnabledInRound) return;
-            if (VeryUsualDay.Instance.CurrentCode == VeryUsualDay.Codes.Green ||
-                VeryUsualDay.Instance.CurrentCode == VeryUsualDay.Codes.Emerald)
+            if (!VeryUsualDay.Instance.IsEnabledInRound)
+                return;
+
+            MedicReviveAbility.OnDying(ev.Player);
+
+            if (VeryUsualDay.Instance.CurrentCode ==
+                    VeryUsualDay.Codes.Green ||
+                VeryUsualDay.Instance.CurrentCode ==
+                    VeryUsualDay.Codes.Emerald)
             {
                 ev.Player.ClearInventory(destroy: true);
             }
         }
-        
+
         public static void OnDied(DiedEventArgs ev)
         {
-            if (!VeryUsualDay.Instance.IsEnabledInRound) return;
-            if (ev.Player.TryGetSessionVariable("haveBody", out bool haveBody) && haveBody) return;
+            if (!VeryUsualDay.Instance.IsEnabledInRound)
+                return;
+
+            if (ev.Player.TryGetSessionVariable(
+                    "haveBody",
+                    out bool haveBody) &&
+                haveBody)
+            {
+                return;
+            }
+
+            bool medicManagedCorpse =
+                MedicReviveAbility.OnDied(ev.Player);
+
+            ev.Player.CustomInfo = "Человек";
+            ev.Player.MaxHealth = 100f;
+            ev.Player.Scale = new Vector3(1f, 1f, 1f);
+
+            ev.Player.SessionVariables[
+                "isCustomScp"] = false;
+
+            ev.Player.SessionVariables.Remove("vudmood");
             ev.Player.CustomInfo = "Человек";
             ev.Player.MaxHealth = 100f;
             ev.Player.Scale = new Vector3(1f, 1f, 1f);
@@ -239,19 +296,35 @@ namespace VeryUsualDay.Handlers
             {
                 VeryUsualDay.Instance.Shakheds.Remove(ev.Player.Id);
             }
-            if (VeryUsualDay.Instance.CurrentCode == VeryUsualDay.Codes.Green ||
-                VeryUsualDay.Instance.CurrentCode == VeryUsualDay.Codes.Emerald)
+            if (!medicManagedCorpse &&
+                (VeryUsualDay.Instance.CurrentCode ==
+                     VeryUsualDay.Codes.Green ||
+                 VeryUsualDay.Instance.CurrentCode ==
+                     VeryUsualDay.Codes.Emerald))
             {
-                Timing.CallDelayed(5f, () => { Ragdoll.GetLast(ev.Player).Destroy(); });
+                Timing.CallDelayed(5f, () =>
+                {
+                    Ragdoll ragdoll =
+                        Ragdoll.GetLast(ev.Player);
+
+                    if (ragdoll != null &&
+                        ragdoll.IsSpawned)
+                    {
+                        ragdoll.Destroy();
+                    }
+                });
             }
         }
 
         public static void OnLeft(LeftEventArgs ev)
         {
-            if (ev.Player.TryGetSessionVariable("serverSettings", out List<SettingBase> settings))
-            {
-                SettingBase.Unregister(ev.Player, settings);
-            }
+            InventoryLimitsManager.Forget(ev.Player);
+            EngineerRepairAbility.CancelRepair(
+            ev.Player,
+            false);
+            MedicReviveAbility.OnLeft(
+                ev.Player);
+
             if (ev.Player.TryGetSessionVariable("isInPrison", out bool prisonState) && prisonState)
             {
                 ev.Player.TryGetSessionVariable("prisonReason", out string reason);
@@ -305,10 +378,7 @@ namespace VeryUsualDay.Handlers
         public static void OnVerified(VerifiedEventArgs ev)
         {
             if (!VeryUsualDay.Instance.IsEnabledInRound) return;
-            if (VeryUsualDay.Instance.Is682EventActive)
-            {
-                VeryUsualDay.Instance.Apply682EventFog(ev.Player);
-            }
+            SettingBase.SendToPlayer(ev.Player);
             if (VeryUsualDay.Instance.Config.AuthToken != "")
             {
                 var userData = (ITuple)PrisonController.CheckIfPlayerInPrison(ev.Player);
@@ -327,14 +397,6 @@ namespace VeryUsualDay.Handlers
                 }
             }
 
-            var settings = new List<SettingBase>
-            {
-                VeryUsualDay.SettingsHeader,
-                new MemeticsAbility().Setting,
-                new BodyTakeoverAbility().Setting
-            };
-            ev.Player.SessionVariables["serverSettings"] = settings;
-            SettingBase.Register(ev.Player, settings);
         }
 
         public static void OnHurt(HurtEventArgs ev)
@@ -593,6 +655,109 @@ namespace VeryUsualDay.Handlers
             }
 
             VeryUsualDay.Instance.DisableGateGuard();
+        }
+        public static void OnPickingUpLimitedItem(PickingUpItemEventArgs ev)
+        {
+            if (!InventoryLimitsManager.TryGetCategoryLimit(
+                    ev.Player,
+                    ItemCategory.SpecialWeapon,
+                    out sbyte limit))
+            {
+                return;
+            }
+
+            if (ev.Pickup.Category != ItemCategory.SpecialWeapon)
+                return;
+
+            int currentCount = ev.Player.Items.Count(
+                item => item.Category == ItemCategory.SpecialWeapon);
+
+            if (currentCount >= limit)
+            {
+                ev.IsAllowed = false;
+                return;
+            }
+
+            ev.IsAllowed = false;
+
+            var player = ev.Player;
+            var pickup = ev.Pickup;
+
+            Timing.CallDelayed(0f, () =>
+            {
+                if (player == null || pickup == null || !pickup.IsSpawned)
+                    return;
+
+                var item = player.AddItem(
+                    pickup,
+                    ItemAddReason.PickedUp);
+
+                if (item != null && pickup.IsSpawned)
+                    pickup.Destroy();
+            });
+        }
+        public static void OnArmorAdded(ItemAddedEventArgs ev)
+        {
+            if (!IsArmor(ev.Item.Type))
+                return;
+
+            Timing.CallDelayed(0.05f, () =>
+            {
+                InventoryLimitsManager.RefreshAmmoLimits(ev.Player);
+            });
+        }
+
+        public static void OnArmorRemoved(ItemRemovedEventArgs ev)
+        {
+            if (!IsArmor(ev.Item.Type))
+                return;
+
+            Timing.CallDelayed(0.05f, () =>
+            {
+                InventoryLimitsManager.RefreshAmmoLimits(ev.Player);
+            });
+        }
+
+        private static bool IsArmor(ItemType type)
+        {
+            return type == ItemType.ArmorLight ||
+                   type == ItemType.ArmorCombat ||
+                   type == ItemType.ArmorHeavy;
+        }
+        private static readonly List<SettingBase> ServerSettings = new List<SettingBase>
+{
+    VeryUsualDay.SettingsHeader,
+
+    new MemeticsAbility().Setting,
+    new BodyTakeoverAbility().Setting,
+
+    new EngineerRepairAbility().Setting,
+    new MedicReviveAbility().Setting,
+
+    new AcidStoneAbility().Setting,
+    new AcidFountainAbility().Setting,
+    new HeavyJumpAbility().Setting,
+    new RoarAbility().Setting,
+    new ChargeAbility().Setting
+};
+        private static bool _serverSettingsRegistered;
+
+        public static void RegisterServerSettings()
+        {
+            if (_serverSettingsRegistered)
+                return;
+
+            SettingBase.Register(ServerSettings);
+            _serverSettingsRegistered = true;
+        }
+
+        public static void UnregisterServerSettings()
+        {
+            if (!_serverSettingsRegistered)
+                return;
+
+            SettingBase.Unregister(settings: ServerSettings);
+            _serverSettingsRegistered = false;
         }
     }
 }

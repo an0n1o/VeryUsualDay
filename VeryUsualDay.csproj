@@ -66,13 +66,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AudioPlayerApi">
+      <Version>1.1.3</Version>
+    </PackageReference>
     <PackageReference Include="ExMod.Exiled" Version="9.14.2" />
+    <PackageReference Include="Lib.Harmony">
+      <Version>2.4.2</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities\BaseAbility.cs" />
+    <Compile Include="Abilities\Engineer\EngineerRepairAbility..cs" />
+    <Compile Include="Abilities\Medic\MedicReviveAbility..cs" />
     <Compile Include="Abilities\Scp035\BodyTakeoverAbility.cs" />
     <Compile Include="Abilities\Scp035\MemeticsAbility.cs" />
+    <Compile Include="Abilities\Scp682Event\AcidFountainAbility..cs" />
+    <Compile Include="Abilities\Scp682Event\AcidStoneAbility..cs" />
+    <Compile Include="Abilities\Scp682Event\ChargeAbility..cs" />
+    <Compile Include="Abilities\Scp682Event\HeavyJumpAbility..cs" />
+    <Compile Include="Abilities\Scp682Event\RoarAbility..cs" />
+    <Compile Include="Abilities\Scp682Event\Scp682EventAbility.cs" />
+    <Compile Include="Abilities\Scp682Event\Scp682EventAbilityManager..cs" />
     <Compile Include="Commands\Aban.cs" />
     <Compile Include="Commands\AfterClean.cs" />
     <Compile Include="Commands\AllowSpawn.cs" />
@@ -84,6 +99,7 @@
     <Compile Include="Commands\CheckCode.cs" />
     <Compile Include="Commands\CheckCodePlayer.cs" />
     <Compile Include="Commands\ClassD.cs" />
+    <Compile Include="Commands\GetItem.cs" />
     <Compile Include="Commands\Cuff.cs" />
     <Compile Include="Commands\CustomHelp.cs" />
     <Compile Include="Commands\GateGuard.cs" />
@@ -120,6 +136,7 @@
     <Compile Include="Commands\Spawn966.cs" />
     <Compile Include="Commands\Spawn999.cs" />
     <Compile Include="Commands\Spawnbuo.cs" />
+    <Compile Include="Commands\Spawnoss.cs" />
     <Compile Include="Commands\SupplyCassie.cs" />
     <Compile Include="Commands\VudClassD.cs" />
     <Compile Include="Commands\VudClear.cs" />
@@ -135,10 +152,14 @@
     <Compile Include="Handlers\Scp049.cs" />
     <Compile Include="Handlers\Server.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Patches\InventoryLimitsPatcher.cs" />
     <Compile Include="PrisonController.cs" />
     <Compile Include="Utils\ClassD.cs" />
+    <Compile Include="Utils\ClassDRoomRandomItemsManager.cs" />
     <Compile Include="Utils\Guard.cs" />
+    <Compile Include="Utils\InventoryLimitsManager.cs" />
     <Compile Include="Utils\MtfMedic.cs" />
+    <Compile Include="Utils\RespawnBlocker.cs" />
     <Compile Include="Utils\Scientist.cs" />
     <Compile Include="Utils\Scp0082.cs" />
     <Compile Include="Utils\Scp01921.cs" />
@@ -155,6 +176,7 @@
     <Compile Include="Utils\Scp966.cs" />
     <Compile Include="Utils\Scp999.cs" />
     <Compile Include="Utils\TutorialHuman.cs" />
+    <Compile Include="Utils\SpecialUnitManager.cs" />
     <Compile Include="Utils\Worker.cs" />
     <Compile Include="VeryUsualDay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,6 +187,8 @@
     <Content Include=".gitignore" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
+    <EmbeddedResource Include="Resources\682roar.ogg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

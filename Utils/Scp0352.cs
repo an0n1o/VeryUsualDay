@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using MEC;
 using UnityEngine;
+using VeryUsualDay.Abilities.Medic;
 
 namespace VeryUsualDay.Utils
 {
@@ -16,6 +17,7 @@ namespace VeryUsualDay.Utils
 
         private void _spawn()
         {
+            MedicReviveAbility.MarkCustomScpSpawn(User);
             User.CustomInfo = "<b><color=#960018>SCP-035-2</color></b>";
             User.MaxHealth = 350f;
             User.Health = 350f;

@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
 using UnityEngine;
+using VeryUsualDay.Abilities.Medic;
 
 namespace VeryUsualDay.Utils
 {
@@ -18,6 +19,7 @@ namespace VeryUsualDay.Utils
 
         private void _spawn()
         {
+            MedicReviveAbility.MarkCustomScpSpawn(User);
             User.Role.Set(RoleTypeId.ClassD, reason: SpawnReason.ForceClass, spawnFlags: RoleSpawnFlags.AssignInventory);
             Timing.CallDelayed(2f, () =>
             {

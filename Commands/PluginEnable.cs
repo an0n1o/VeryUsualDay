@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using CommandSystem;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Core.UserSettings;
 using MEC;
 using PlayerRoles;
 using UnityEngine;
-using VeryUsualDay.Abilities.Scp035;
 using Item = Exiled.API.Features.Items.Item;
+using VeryUsualDay.Utils;
+using VeryUsualDay.Abilities.Scp682Event;
 
 namespace VeryUsualDay.Commands
 {
@@ -25,12 +24,15 @@ namespace VeryUsualDay.Commands
             if (VeryUsualDay.Instance.IsEnabledInRound)
             {
                 VeryUsualDay.Instance.Set682EventMode(false);
+                Scp682EventAbilityManager.Reset();
+                InventoryLimitsManager.ClearAll();
                 VeryUsualDay.Instance.IsEnabledInRound = false;
                 VeryUsualDay.Instance.IsLunchtimeActive = false;
                 VeryUsualDay.Instance.IsDboysSpawnAllowed = false;
                 VeryUsualDay.Instance.Is008Leaked = false;
                 VeryUsualDay.Instance.CurrentCode = VeryUsualDay.Codes.Green;
                 VeryUsualDay.Instance.BuoCounter = 0;
+                VeryUsualDay.Instance.OssCounter = 0;
                 VeryUsualDay.Instance.SpawnedDboysCounter = 1;
                 VeryUsualDay.Instance.SpawnedWorkersCounter = 1;
                 VeryUsualDay.Instance.SpawnedScientistCounter = 1;
@@ -67,16 +69,12 @@ namespace VeryUsualDay.Commands
                         }
                     }
                 }
-                
-                VeryUsualDay.Instance.Vase.Destroy();
 
-                foreach (var player in Player.List)
-                {
-                    if (player.TryGetSessionVariable("serverSettings", out List<SettingBase> settings))
-                    {
-                        SettingBase.Unregister(player, settings);
-                    }
-                }
+                VeryUsualDay.Instance.Vase?.Destroy();
+                VeryUsualDay.Instance.Vase = null;
+
+                Handlers.Player.UnregisterServerSettings();
+
                 response = "Режим FX выключен.";
             }
             else
@@ -137,20 +135,12 @@ namespace VeryUsualDay.Commands
                 }
                 var vase = Item.Create(ItemType.SCP244a);
                 vase.Scale = new Vector3(8f, 8f, 8f);
-                VeryUsualDay.Instance.Vase = vase.CreatePickup(VeryUsualDay.Instance.VaseCoords);
 
-                foreach (var player in Player.List)
-                {
-                    var settings = new List<SettingBase>
-                    {
-                        VeryUsualDay.SettingsHeader,
-                        new MemeticsAbility().Setting,
-                        new BodyTakeoverAbility().Setting
-                    };
-                    player.SessionVariables["serverSettings"] = settings;
-                    SettingBase.Register(player, settings);
-                }
-                
+                VeryUsualDay.Instance.Vase =
+                    vase.CreatePickup(VeryUsualDay.Instance.VaseCoords);
+
+                Handlers.Player.RegisterServerSettings();
+
                 response = "Режим FX включён.";
             }
             return true;

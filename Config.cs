@@ -876,7 +876,7 @@ namespace VeryUsualDay
             ItemType.Radio,
             ItemType.KeycardMTFOperative
         };
-        
+
         [Description("Инвентарь ликвидатора БУО (List<ItemType>)")]
         public List<ItemType> BuoTerminatorInventory { get; set; } = new List<ItemType>
         {
@@ -889,6 +889,170 @@ namespace VeryUsualDay
             ItemType.ArmorHeavy,
             ItemType.KeycardMTFOperative
         };
+        [Description("Эффекты бойцов БУО (Dictionary<string, Dictionary<EffectType, byte>>)")]
+        public Dictionary<string, Dictionary<EffectType, byte>> BuoEffects { get; set; } =
+    new Dictionary<string, Dictionary<EffectType, byte>>
+    {
+        {
+            "Боец",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.BodyshotReduction, 35 },
+                { EffectType.DamageReduction, 35 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Сержант",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.BodyshotReduction, 35 },
+                { EffectType.DamageReduction, 35 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Джаггернаут",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.BodyshotReduction, 35 },
+                { EffectType.DamageReduction, 35 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Ликвидатор",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Vitality, 10 },
+                { EffectType.BodyshotReduction, 35 },
+                { EffectType.DamageReduction, 35 },
+                { EffectType.MovementBoost, 15 }
+            }
+        }
+    };
+
+        [Description("Инвентарь бойца ОСС (List<ItemType>)")]
+        public List<ItemType> OssPrivateInventory { get; set; } = new List<ItemType>
+{
+    ItemType.GunE11SR,
+    ItemType.GunLogicer,
+    ItemType.ParticleDisruptor,
+    ItemType.SCP500,
+    ItemType.Radio,
+    ItemType.KeycardMTFOperative,
+    ItemType.ArmorCombat,
+    ItemType.GunCom45
+};
+
+        [Description("Инвентарь сержанта ОСС (List<ItemType>)")]
+        public List<ItemType> OssSergeantInventory { get; set; } = new List<ItemType>
+{
+    ItemType.GunFRMG0,
+    ItemType.GunAK,
+    ItemType.SCP500,
+    ItemType.Radio,
+    ItemType.ParticleDisruptor,
+    ItemType.Jailbird,
+    ItemType.ArmorCombat,
+    ItemType.KeycardMTFOperative
+};
+
+        [Description("Инвентарь джаггернаута ОСС (List<ItemType>)")]
+        public List<ItemType> OssJaggerInventory { get; set; } = new List<ItemType>
+{
+    ItemType.GunLogicer,
+    ItemType.GunLogicer,
+    ItemType.MicroHID,
+    ItemType.ParticleDisruptor,
+    ItemType.SCP500,
+    ItemType.Radio,
+    ItemType.KeycardMTFOperative,
+    ItemType.ArmorHeavy
+};
+
+        [Description("Инвентарь ликвидатора ОСС (List<ItemType>)")]
+        public List<ItemType> OssTerminatorInventory { get; set; } = new List<ItemType>
+{
+    ItemType.GunLogicer,
+    ItemType.GunFRMG0,
+    ItemType.MicroHID,
+    ItemType.Jailbird,
+    ItemType.SCP500,
+    ItemType.Radio,
+    ItemType.KeycardMTFOperative,
+    ItemType.ArmorHeavy
+};
+
+        [Description("Инвентарь капитана ОСС (List<ItemType>)")]
+        public List<ItemType> OssCaptainInventory { get; set; } = new List<ItemType>
+{
+    ItemType.GunFRMG0,
+    ItemType.GunLogicer,
+    ItemType.MicroHID,
+    ItemType.MicroHID,
+    ItemType.SCP500,
+    ItemType.ArmorHeavy,
+    ItemType.KeycardMTFCaptain,
+    ItemType.Radio
+};
+
+        [Description("Эффекты бойцов ОСС (Dictionary<string, Dictionary<EffectType, byte>>)")]
+        public Dictionary<string, Dictionary<EffectType, byte>> OssEffects { get; set; } =
+            new Dictionary<string, Dictionary<EffectType, byte>>
+            {
+        {
+            "Боец",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Scp1853, 1 },
+                { EffectType.BodyshotReduction, 45 },
+                { EffectType.DamageReduction, 45 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Сержант",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Scp1853, 1 },
+                { EffectType.BodyshotReduction, 45 },
+                { EffectType.DamageReduction, 45 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Джаггернаут",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Scp1853, 1 },
+                { EffectType.BodyshotReduction, 45 },
+                { EffectType.DamageReduction, 45 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Ликвидатор",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Scp1853, 1 },
+                { EffectType.BodyshotReduction, 45 },
+                { EffectType.DamageReduction, 45 },
+                { EffectType.MovementBoost, 15 }
+            }
+        },
+        {
+            "Капитан",
+            new Dictionary<EffectType, byte>
+            {
+                { EffectType.Scp1344, 1 },
+                { EffectType.Scp1853, 1 },
+                { EffectType.BodyshotReduction, 50 },
+                { EffectType.DamageReduction, 50 },
+                { EffectType.MovementBoost, 30 }
+            }
+        }
+            };
 
         [Description("Список ролей, на которые не распростроняется инфекция SCP-008 (List<RoleTypeId>)")]
         public List<RoleTypeId> DoNotPoisonRoles { get; set; } = new List<RoleTypeId>

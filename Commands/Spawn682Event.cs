@@ -36,7 +36,7 @@ namespace VeryUsualDay.Commands
                 return false;
             }
 
-            if (!Player.TryGet(id, out var scp682))
+            if (!Player.TryGet(id, out var scp682event))
             {
                 response = "Не удалось найти игрока с таким ID!";
                 return false;
@@ -44,12 +44,12 @@ namespace VeryUsualDay.Commands
 
             if (VeryUsualDay.Instance.ScpPlayers.ContainsKey(id))
             {
-                var human = new TutorialHuman(scp682);
+                var human = new TutorialHuman(scp682event);
                 response = "SCP удалён!";
                 return true;
             }
 
-            var scp = new Scp682Event(scp682);
+            var scp = new Scp682Event(scp682event);
 
             response = "Ивентовый SCP-682 создан!";
             return true;

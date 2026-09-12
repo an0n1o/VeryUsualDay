@@ -10,19 +10,25 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items.Keycards;
 using Exiled.API.Features.Pickups;
+using HarmonyLib;
 using Interactables.Interobjects.DoorUtils;
-using Exiled.API.Features.Doors;
 using MEC;
 using Newtonsoft.Json;
 using PlayerRoles;
 using UnityEngine;
+using VeryUsualDay.Abilities.Medic;
+using VeryUsualDay.Patches;
+using VeryUsualDay.Utils;
 using Player = VeryUsualDay.Handlers.Player;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Random = UnityEngine.Random;
 using Server = VeryUsualDay.Handlers.Server;
 using ServerHandler = Exiled.Events.Handlers.Server;
+using VeryUsualDay.Abilities.Scp682Event;
+using System.IO;
 
 namespace VeryUsualDay
 {
@@ -50,11 +56,14 @@ namespace VeryUsualDay
         public List<int> Zombies { get; set; } = new List<int>();
         public List<RoomType> ChaosRooms { get; set; } = new List<RoomType>();
         public int BuoCounter { get; set; } = 1;
+        public int OssCounter { get; set; } = 1;
         public int SpawnedDboysCounter { get; set; } = 1;
         public int SpawnedWorkersCounter { get; set; } = 1;
         public int SpawnedScientistCounter { get; set; } = 1;
         public int SpawnedSecurityCounter { get; set; } = 1;
-        
+
+        private Harmony _inventoryLimitsHarmony;
+
         private readonly Vector3 _armedPersonnelTowerCoords = new Vector3(-16f, 315f, -32f);
         private readonly Vector3 _civilianPersonnelTowerCoords = new Vector3(44.4f, 315f, -51.6f);
         public readonly Vector3 SpawnPosition = new Vector3(139.487f, 296.7f, -16.762f);
@@ -113,6 +122,7 @@ namespace VeryUsualDay
 
         private static void _registerEvents()
         {
+            Scp682EventAbilityManager.RegisterEvents();
             PlayerHandler.ChangingRole += Player.OnChangingRole;
             PlayerHandler.PickingUpItem += Player.OnPickingUpItem;
             PlayerHandler.DroppingItem += Player.OnDroppingItem;
@@ -131,6 +141,13 @@ namespace VeryUsualDay
             PlayerHandler.ChangingItem += Player.OnChangingItem;
             PlayerHandler.ReceivingEffect += Player.OnReceivingEffect;
             PlayerHandler.SentValidCommand += Player.OnSentValidCommand;
+            Exiled.Events.Handlers.Player.PickingUpItem +=
+    Handlers.Player.OnPickingUpLimitedItem;
+            Exiled.Events.Handlers.Player.ItemAdded +=
+    Handlers.Player.OnArmorAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved +=
+                Handlers.Player.OnArmorRemoved;
+            RespawnBlocker.Enable();
 
             ServerHandler.WaitingForPlayers += Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted += Server.OnRoundStarted;
@@ -140,6 +157,7 @@ namespace VeryUsualDay
 
         private static void _unregisterEvents()
         {
+            Scp682EventAbilityManager.UnregisterEvents();
             PlayerHandler.ChangingRole -= Player.OnChangingRole;
             PlayerHandler.PickingUpItem -= Player.OnPickingUpItem;
             PlayerHandler.DroppingItem -= Player.OnDroppingItem;
@@ -158,6 +176,13 @@ namespace VeryUsualDay
             PlayerHandler.ChangingItem -= Player.OnChangingItem;
             PlayerHandler.ReceivingEffect -= Player.OnReceivingEffect;
             PlayerHandler.SentValidCommand -= Player.OnSentValidCommand;
+            Exiled.Events.Handlers.Player.PickingUpItem -=
+    Handlers.Player.OnPickingUpLimitedItem;
+            Exiled.Events.Handlers.Player.ItemAdded -=
+    Handlers.Player.OnArmorAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved -=
+                Handlers.Player.OnArmorRemoved;
+            RespawnBlocker.Disable();
 
             ServerHandler.WaitingForPlayers -= Server.OnWaitingForPlayers;
             ServerHandler.RoundStarted -= Server.OnRoundStarted;
@@ -168,21 +193,42 @@ namespace VeryUsualDay
         public override void OnEnabled()
         {
             Instance = this;
+
+            _inventoryLimitsHarmony = new Harmony(
+                "com.justmarfix.veryusualday.inventorylimits." +
+                Guid.NewGuid().ToString("N"));
+
+            InventoryLimitsPatcher.Patch(_inventoryLimitsHarmony);
+
             if (Instance.Config.AuthToken == "")
             {
-                Log.Error("AuthToken пуст - функционал тюрьмы и БД будет недоступен.");
+                Log.Error(
+                    "AuthToken пуст - функционал тюрьмы и БД будет недоступен.");
             }
+            Scp682EventAbilityManager.LoadRoarClip();
+
             _registerEvents();
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            Instance = null;
+            Scp682EventAbilityManager.UnloadRoarClip();
+            InventoryLimitsManager.ClearAll();
             _unregisterEvents();
+            if (_inventoryLimitsHarmony != null)
+            {
+                _inventoryLimitsHarmony.UnpatchAll(
+                    _inventoryLimitsHarmony.Id);
+
+                _inventoryLimitsHarmony = null;
+            }
+
+            Instance = null;
+
             base.OnDisabled();
         }
-        
+
         public IEnumerator<float> _008_poisoning()
         {
             for (;;)
@@ -368,39 +414,59 @@ namespace VeryUsualDay
             {
                 return;
             }
+            MedicReviveAbility.MarkNewLife(player);
+
+            player.SessionVariables["isCustomScp"] = false;
 
             var splitted = json[1].Split(' ');
             player.CustomInfo = new StringBuilder().Append($"\"{splitted[0]}\" ").Append(string.Join(" ", splitted.Skip(1))).ToString(); // add quotes to the name and conc. to the main string
             player.CustomName = json[2];
+            player.SessionVariables["isEngineer"] = false;
+            player.SessionVariables["isEngineer"] = false;
+            player.SessionVariables["isMedic"] = false;
             switch (json[3])
             {
                 case "СБ":
                     player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
+
                     Timing.CallDelayed(2f, () =>
                     {
+                        InventoryLimitsManager.Apply(player, json[3], json[4]);
+
                         foreach (var item in Instance.Config.SecurityItems[json[4]])
                         {
                             player.AddItem(item);
                         }
+
                         foreach (var ammo in Instance.Config.SecurityAmmo[json[4]])
                         {
                             player.AddAmmo(ammo, 60);
                         }
+
                         player.MaxHealth = Instance.Config.SecurityHealth[json[4]];
                         player.Health = Instance.Config.SecurityHealth[json[4]];
-                        
+
                         player.EnableEffect(EffectType.DamageReduction);
                         player.ChangeEffectIntensity(EffectType.DamageReduction, 30);
+
                         player.EnableEffect(EffectType.BodyshotReduction);
                         player.ChangeEffectIntensity(EffectType.BodyshotReduction, 30);
-                        
+
                         player.Teleport(_armedPersonnelTowerCoords);
                     });
                     break;
                 case "НС":
                     player.Role.Set(RoleTypeId.Scientist, RoleSpawnFlags.None);
+
+                    player.SessionVariables["isEngineer"] =
+                    json[4] == "Инженер";
+
+                    player.SessionVariables["isMedic"] =
+                    json[4] == "Медик";
                     Timing.CallDelayed(2f, () =>
                     {
+                        InventoryLimitsManager.Apply(player, json[3], json[4]);
+
                         foreach (var item in Instance.Config.ScientificItems[json[4]])
                         {
                             player.AddItem(item);
@@ -419,9 +485,10 @@ namespace VeryUsualDay
 
                         player.EnableEffect(EffectType.DamageReduction);
                         player.ChangeEffectIntensity(EffectType.DamageReduction, 15);
+
                         player.EnableEffect(EffectType.BodyshotReduction);
                         player.ChangeEffectIntensity(EffectType.BodyshotReduction, 15);
-                        
+
                         player.Teleport(_civilianPersonnelTowerCoords);
                     });
                     break;
@@ -444,26 +511,36 @@ namespace VeryUsualDay
                     });
                     break;
                 case "ГОР":
-                    player.Role.Set(Instance.Config.EmfRoles[json[4]], RoleSpawnFlags.None);
+                    player.Role.Set(
+                Instance.Config.EmfRoles[json[4]],
+                RoleSpawnFlags.None);
+
                     Timing.CallDelayed(2f, () =>
                     {
+                        InventoryLimitsManager.Apply(player, json[3], json[4]);
+
                         foreach (var item in Instance.Config.EmfItems[json[4]])
                         {
                             player.AddItem(item);
                         }
+
                         foreach (var ammo in Instance.Config.EmfAmmo[json[4]])
                         {
                             player.AddAmmo(ammo, 60);
                         }
+
                         foreach (var pair in Instance.Config.EmfEffects[json[4]])
                         {
                             player.EnableEffect(pair.Key);
                             player.ChangeEffectIntensity(pair.Key, pair.Value);
                         }
+
                         player.MaxHealth = Instance.Config.EmfHealth[json[4]];
                         player.Health = Instance.Config.EmfHealth[json[4]];
+
                         player.Teleport(_armedPersonnelTowerCoords);
                     });
+
                     break;
                 case "ОВБ":
                     player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
@@ -503,7 +580,13 @@ namespace VeryUsualDay
                     });
                     break;
                 case "Испытуемые":
+                    player.SessionVariables["isTestSubject"] = true;
+
+                    player.SessionVariables.Remove("classDGetItemLastUse");
+                    player.SessionVariables.Remove("classDGetItemUsedRooms");
+
                     player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
+
                     Timing.CallDelayed(2f, () =>
                     {
                         player.ClearInventory();
@@ -610,27 +693,6 @@ namespace VeryUsualDay
         public void Set682EventMode(bool enabled)
         {
             Is682EventActive = enabled;
-
-            foreach (var player in Exiled.API.Features.Player.List)
-            {
-                if (enabled)
-                {
-                    Apply682EventFog(player);
-                }
-                else
-                {
-                    player.DisableEffect(EffectType.FogControl);
-                }
-            }
-        }
-
-        public void Apply682EventFog(Exiled.API.Features.Player player)
-        {
-            if (!Is682EventActive || player == null)
-                return;
-
-            player.EnableEffect(EffectType.FogControl);
-            player.ChangeEffectIntensity(EffectType.FogControl, 10);
         }
     }
 }
